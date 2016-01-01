@@ -1,0 +1,14 @@
+C:\Development\Applications\C\Git\Authentication\Authentication.Infrastructure\obj\Debug\Authentication.Infrastructure.csprojResolveAssemblyReference.cache
+C:\Development\Applications\C\Git\Authentication\Authentication.Infrastructure\bin\Debug\Authentication.Infrastructure.dll
+C:\Development\Applications\C\Git\Authentication\Authentication.Infrastructure\bin\Debug\Authentication.Infrastructure.pdb
+C:\Development\Applications\C\Git\Authentication\Authentication.Infrastructure\bin\Debug\Authentication.Data.dll
+C:\Development\Applications\C\Git\Authentication\Authentication.Infrastructure\bin\Debug\Authentication.Domain.dll
+C:\Development\Applications\C\Git\Authentication\Authentication.Infrastructure\bin\Debug\Dapper.dll
+C:\Development\Applications\C\Git\Authentication\Authentication.Infrastructure\bin\Debug\Microsoft.AspNet.Identity.Core.dll
+C:\Development\Applications\C\Git\Authentication\Authentication.Infrastructure\bin\Debug\Authentication.Data.pdb
+C:\Development\Applications\C\Git\Authentication\Authentication.Infrastructure\bin\Debug\Authentication.Domain.pdb
+C:\Development\Applications\C\Git\Authentication\Authentication.Infrastructure\bin\Debug\Dapper.pdb
+C:\Development\Applications\C\Git\Authentication\Authentication.Infrastructure\bin\Debug\Dapper.xml
+C:\Development\Applications\C\Git\Authentication\Authentication.Infrastructure\bin\Debug\Microsoft.AspNet.Identity.Core.xml
+C:\Development\Applications\C\Git\Authentication\Authentication.Infrastructure\obj\Debug\Authentication.Infrastructure.dll
+C:\Development\Applications\C\Git\Authentication\Authentication.Infrastructure\obj\Debug\Authentication.Infrastructure.pdb
