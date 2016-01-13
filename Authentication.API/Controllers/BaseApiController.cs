@@ -12,6 +12,7 @@ namespace Authentication.API.Controllers
     {
 
       private Infrastructure.UnitOfWork _unitOfWork;
+      private Factories.ModelFactory _modelFactory;
 
       protected Infrastructure.UnitOfWork UnitOfWork
       {
@@ -19,7 +20,24 @@ namespace Authentication.API.Controllers
         {
           return _unitOfWork;
         }
+        set
+        {
+          _unitOfWork = value;
+        }
       }
+
+      protected Factories.ModelFactory TheModelFactory
+      {
+        get
+        {
+          if (_modelFactory == null)
+          {
+            _modelFactory = new Factories.ModelFactory(this.Request, this.UnitOfWork.UserManager);
+          }
+          return _modelFactory;
+        }
+      }
+
       public BaseApiController(Infrastructure.UnitOfWork unitOfWork)
       {
         _unitOfWork = unitOfWork;

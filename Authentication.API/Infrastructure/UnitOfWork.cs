@@ -54,6 +54,12 @@ namespace Authentication.API.Infrastructure
     //  set;
     //}
 
+    public IUserRepository UserStore
+    {
+      get;
+      set;
+    }
+
     public Infrastructure.Managers.ApplicationUserManager UserManager
     {
       get;

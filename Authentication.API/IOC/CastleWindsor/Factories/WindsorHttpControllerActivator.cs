@@ -1,7 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web;
 using System.Net.Http;
 using System.Web.Http.Controllers;
 using System.Web.Http.Dispatcher;
@@ -25,6 +22,8 @@ namespace Authentication.API.IOC.CastleWindsor.Factories
 
       return controller;
     }
+
+
 
     private class Release : IDisposable
     {

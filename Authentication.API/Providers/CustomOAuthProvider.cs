@@ -14,11 +14,8 @@ namespace Authentication.API.Providers
   public class CustomOAuthProvider : OAuthAuthorizationServerProvider
   {
 
-    Infrastructure.Managers.ApplicationUserManager _userManager;
-
-    public CustomOAuthProvider(Infrastructure.Managers.ApplicationUserManager userManager)
+    public CustomOAuthProvider()
     {
-      _userManager = userManager;
     }
 
     public override Task ValidateClientAuthentication(OAuthValidateClientAuthenticationContext context)
@@ -34,9 +31,9 @@ namespace Authentication.API.Providers
 
       context.OwinContext.Response.Headers.Add("Access-Control-Allow-Origin", new[] { allowedOrigin });
 
-      //var userManager = context.OwinContext.GetUserManager<Infrastructure.Managers.ApplicationUserManager>();
+      var userManager = context.OwinContext.GetUserManager<Infrastructure.Managers.ApplicationUserManager>();
 
-      User user = await _userManager.FindAsync(context.UserName, context.Password);
+      User user = await userManager.FindAsync(context.UserName, context.Password);
 
       if (user == null)
       {
@@ -50,7 +47,7 @@ namespace Authentication.API.Providers
         return;
       }
 
-      ClaimsIdentity oAuthIdentity = await _userManager.GenerateUserIdentityAsync(user, "JWT");
+      ClaimsIdentity oAuthIdentity = await userManager.GenerateUserIdentityAsync(user, "JWT");
       //oAuthIdentity.AddClaims(ExtendedClaimsProvider.GetClaims(user));
       //oAuthIdentity.AddClaims(RolesFromClaims.CreateRolesBasedOnClaims(oAuthIdentity));
 

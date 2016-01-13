@@ -9,6 +9,9 @@ using Castle.MicroKernel.SubSystems.Configuration;
 using Castle.Windsor;
 using Authentication.Data.Interfaces;
 using Authentication.Data.DbContext;
+using Microsoft.AspNet.Identity;
+using Microsoft.AspNet.Identity.Owin;
+
 
 namespace Authentication.API.IOC.CastleWindsor.Installers
 {
@@ -30,11 +33,11 @@ namespace Authentication.API.IOC.CastleWindsor.Installers
       //          .LifeStyle.Singleton
       //);
 
-      //container.Register(
-      //          Component.For<IUserStore<Authentication.ISSolutions.Domain.Models.User, System.Guid>>()
-      //          .ImplementedBy<Authentication.ISSolutions.Infrastructure.Repositories.Sql.UserStore<Authentication.ISSolutions.Domain.Models.User>>()
-      //          .LifeStyle.PerWebRequest
-      //);
+      container.Register(
+                Component.For<IUserStore<Authentication.Domain.Models.User, System.Guid>>()
+                .ImplementedBy<Authentication.Infrastructure.Repositories.UserRepository>()
+                .LifeStyle.PerWebRequest
+      );
 
       //container.Register(
       //    Component.For<ILoginRepository>()
@@ -48,16 +51,21 @@ namespace Authentication.API.IOC.CastleWindsor.Installers
       //    .LifeStyle.PerWebRequest
       //);
 
-      //container.Register(
-      //          Component.For<UnitOfWork>()
-      //          .ImplementedBy<UnitOfWork>()
-      //          .LifeStyle.PerWebRequest
-      //);
+      container.Register(
+                Component.For<Infrastructure.UnitOfWork>()
+                .ImplementedBy<Infrastructure.UnitOfWork>()
+                .LifeStyle.PerWebRequest
+      );
 
-      //container.Register(
-      //    Component.For<ApplicationUserManager>()
-      //        .UsingFactoryMethod(_ => HttpContext.Current.GetOwinContext().GetUserManager<ApplicationUserManager>()).LifestylePerWebRequest()
-      //);
+      container.Register(
+          Component.For<Infrastructure.Managers.ApplicationUserManager>()
+              .UsingFactoryMethod(_ => HttpContext.Current.GetOwinContext().GetUserManager<Infrastructure.Managers.ApplicationUserManager>()).LifestylePerWebRequest()
+      );
+
+      container.Register(
+          Component.For<Microsoft.Owin.IOwinContext>()
+              .UsingFactoryMethod(_ => HttpContext.Current.GetOwinContext()).LifestylePerWebRequest()
+      );
 
       //container.Register(
       //    Component.For<ApplicationSignInManager>()

@@ -9,6 +9,7 @@ using System.Web.Security;
 using System.Web.SessionState;
 using Castle.Windsor;
 using Castle.Windsor.Installer;
+using System.Web.Routing;
 
 namespace Authentication.API
 {
@@ -19,6 +20,7 @@ namespace Authentication.API
 
     protected void Application_Start(object sender, EventArgs e)
     {
+      GlobalConfiguration.Configure(WebApiConfig.Register);
       BootstrapContainer();
     }
 

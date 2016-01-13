@@ -11,7 +11,7 @@ using Dapper;
 
 namespace Authentication.Infrastructure.Repositories
 {
-  public class UserRepository : IUserStore<User,Guid>
+  public class UserRepository : Interfaces.IUserRepository
  {
     private readonly IDbContext CurrentContext;
 

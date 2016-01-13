@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Authentication.Infrastructure.Interfaces
 {
-  interface IRepository
+  public interface IRepository
   {
   }
 }

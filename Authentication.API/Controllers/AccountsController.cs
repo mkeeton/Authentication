@@ -4,12 +4,21 @@ using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Web.Http;
+using System.Threading.Tasks;
+using Microsoft.AspNet.Identity;
+using Authentication.Domain.Models;
 
 namespace Authentication.API.Controllers
 {
   [RoutePrefix("api/accounts")]
   public class AccountsController : BaseApiController
   {
+
+    public AccountsController(Infrastructure.UnitOfWork unitOfWork)
+      : base(unitOfWork)
+    {
+      this.UnitOfWork = unitOfWork;
+    }
 
     [Authorize(Roles = "Admin")]
     [Route("users")]
@@ -18,7 +27,7 @@ namespace Authentication.API.Controllers
       //Only SuperAdmin or Admin can delete users (Later when implement roles)
       var identity = User.Identity as System.Security.Claims.ClaimsIdentity;
 
-      return Ok(this.AppUserManager.Users.ToList().Select(u => this.TheModelFactory.Create(u)));
+      return Ok(this.UnitOfWork.UserManager.Users.ToList().Select(u => this.TheModelFactory.Create(u)));
     }
 
     [Authorize(Roles = "Admin")]
@@ -26,7 +35,7 @@ namespace Authentication.API.Controllers
     public async Task<IHttpActionResult> GetUser(string Id)
     {
       //Only SuperAdmin or Admin can delete users (Later when implement roles)
-      var user = await this.AppUserManager.FindByIdAsync(Id);
+      var user = await this.UnitOfWork.UserStore.FindByIdAsync(new Guid(Id));
 
       if (user != null)
       {
@@ -42,7 +51,7 @@ namespace Authentication.API.Controllers
     public async Task<IHttpActionResult> GetUserByName(string username)
     {
       //Only SuperAdmin or Admin can delete users (Later when implement roles)
-      var user = await this.AppUserManager.FindByNameAsync(username);
+      var user = await this.UnitOfWork.UserManager.FindByNameAsync(username);
 
       if (user != null)
       {
@@ -55,7 +64,7 @@ namespace Authentication.API.Controllers
 
     [AllowAnonymous]
     [Route("create")]
-    public async Task<IHttpActionResult> CreateUser(CreateUserBindingModel createUserModel)
+    public async Task<IHttpActionResult> CreateUser(ViewModels.UserCreateBindingModel createUserModel)
     {
 
       if (!ModelState.IsValid)
@@ -63,29 +72,29 @@ namespace Authentication.API.Controllers
         return BadRequest(ModelState);
       }
 
-      var user = new ApplicationUser()
+      var user = new User()
       {
         UserName = createUserModel.Username,
         Email = createUserModel.Email,
-        FirstName = createUserModel.FirstName,
-        LastName = createUserModel.LastName,
-        Level = 3,
-        JoinDate = DateTime.Now.Date,
+        //FirstName = createUserModel.FirstName,
+        //LastName = createUserModel.LastName,
+        //Level = 3,
+        //JoinDate = DateTime.Now.Date,
       };
 
 
-      IdentityResult addUserResult = await this.AppUserManager.CreateAsync(user, createUserModel.Password);
+      IdentityResult addUserResult = await this.UnitOfWork.UserManager.CreateAsync(user, createUserModel.Password);
 
       if (!addUserResult.Succeeded)
       {
         return GetErrorResult(addUserResult);
       }
 
-      string code = await this.AppUserManager.GenerateEmailConfirmationTokenAsync(user.Id);
+      string code = await this.UnitOfWork.UserManager.GenerateEmailConfirmationTokenAsync(user.Id);
 
       var callbackUrl = new Uri(Url.Link("ConfirmEmailRoute", new { userId = user.Id, code = code }));
 
-      await this.AppUserManager.SendEmailAsync(user.Id,
+      await this.UnitOfWork.UserManager.SendEmailAsync(user.Id,
                                               "Confirm your account",
                                               "Please confirm your account by clicking <a href=\"" + callbackUrl + "\">here</a>");
 
@@ -100,13 +109,13 @@ namespace Authentication.API.Controllers
     [Route("ConfirmEmail", Name = "ConfirmEmailRoute")]
     public async Task<IHttpActionResult> ConfirmEmail(string userId = "", string code = "")
     {
-      if (string.IsNullOrWhiteSpace(userId) || string.IsNullOrWhiteSpace(code))
+      if (userId==null || string.IsNullOrWhiteSpace(code))
       {
         ModelState.AddModelError("", "User Id and Code are required");
         return BadRequest(ModelState);
       }
 
-      IdentityResult result = await this.AppUserManager.ConfirmEmailAsync(userId, code);
+      IdentityResult result = await this.UnitOfWork.UserManager.ConfirmEmailAsync(new Guid(userId), code);
 
       if (result.Succeeded)
       {
@@ -120,14 +129,14 @@ namespace Authentication.API.Controllers
 
     [Authorize]
     [Route("ChangePassword")]
-    public async Task<IHttpActionResult> ChangePassword(ChangePasswordBindingModel model)
+    public async Task<IHttpActionResult> ChangePassword(ViewModels.ChangePasswordBindingModel model)
     {
       if (!ModelState.IsValid)
       {
         return BadRequest(ModelState);
       }
 
-      IdentityResult result = await this.AppUserManager.ChangePasswordAsync(User.Identity.GetUserId(), model.OldPassword, model.NewPassword);
+      IdentityResult result = await this.UnitOfWork.UserManager.ChangePasswordAsync(new Guid(User.Identity.GetUserId()), model.OldPassword, model.NewPassword);
 
       if (!result.Succeeded)
       {
@@ -144,11 +153,11 @@ namespace Authentication.API.Controllers
 
       //Only SuperAdmin or Admin can delete users (Later when implement roles)
 
-      var appUser = await this.AppUserManager.FindByIdAsync(id);
+      var appUser = await this.UnitOfWork.UserStore.FindByIdAsync(new Guid(id));
 
       if (appUser != null)
       {
-        IdentityResult result = await this.UnitOfWork.UserRepository.DeleteAsync(appUser);
+        IdentityResult result = await this.UnitOfWork.UserManager.DeleteAsync(appUser);
 
         if (!result.Succeeded)
         {

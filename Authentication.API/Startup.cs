@@ -1,19 +1,22 @@
-﻿using Microsoft.Owin;
-using Microsoft.Owin.Security;
-using Microsoft.Owin.Security.DataHandler.Encoder;
-using Microsoft.Owin.Security.Jwt;
-using Microsoft.Owin.Security.OAuth;
-using Newtonsoft.Json.Serialization;
-using Owin;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Configuration;
 using System.Linq;
 using System.Net.Http.Formatting;
 using System.Web;
 using System.Web.Http;
+using Owin;
+using Microsoft.Owin;
+using Microsoft.Owin.Security;
+using Microsoft.Owin.Security.DataHandler.Encoder;
+using Microsoft.Owin.Security.Jwt;
+using Microsoft.Owin.Security.OAuth;
+using Microsoft.AspNet.Identity;
+using Microsoft.AspNet.Identity.Owin;
+using Newtonsoft.Json.Serialization;
 
-namespace Authentication.API.App_Start
+[assembly: OwinStartupAttribute(typeof(Authentication.API.Startup))]
+namespace Authentication.API
 {
   public class Startup
   {
@@ -21,6 +24,8 @@ namespace Authentication.API.App_Start
     public void Configuration(IAppBuilder app)
     {
       HttpConfiguration httpConfig = new HttpConfiguration();
+
+      ConfigureOAuth(app);
 
       ConfigureOAuthTokenGeneration(app);
 
@@ -34,13 +39,29 @@ namespace Authentication.API.App_Start
 
     }
 
-    private void ConfigureOAuthTokenGeneration(IAppBuilder app)
+    private void ConfigureOAuth(IAppBuilder app)
     {
       // Configure the db context and user manager to use a single instance per request
       //app.CreatePerOwinContext(ApplicationDbContext.Create);
-      //app.CreatePerOwinContext<ApplicationUserManager>(ApplicationUserManager.Create);
+      app.CreatePerOwinContext<Infrastructure.Managers.ApplicationUserManager>(Infrastructure.Managers.ApplicationUserManager.Create);
+    }
+
+    private void ConfigureOAuthTokenGeneration(IAppBuilder app)
+    {
+
 
       // Plugin the OAuth bearer JSON Web Token tokens generation and Consumption will be here
+     
+      //OAuthAuthorizationServerOptions OAuthServerOptions = new OAuthAuthorizationServerOptions()
+      //{
+      //  //For Dev enviroment only (on production should be AllowInsecureHttp = false)
+      //  AllowInsecureHttp = true,
+      //  TokenEndpointPath = new PathString("/oauth/token"),
+      //  AccessTokenExpireTimeSpan = TimeSpan.FromDays(1),
+      //  //Provider = new Providers.CustomOAuthProvider(Authentication.API.Global.GetContainer().Kernel.Resolve<Infrastructure.Managers.ApplicationUserManager>()),
+      //  Provider = new Providers.CustomOAuthProvider(HttpContext.Current.GetOwinContext().GetUserManager<Infrastructure.Managers.ApplicationUserManager>()),
+      //  AccessTokenFormat = new Providers.CustomJwtFormat("http://localhost:50378")
+      //};
 
       OAuthAuthorizationServerOptions OAuthServerOptions = new OAuthAuthorizationServerOptions()
       {
@@ -48,8 +69,8 @@ namespace Authentication.API.App_Start
         AllowInsecureHttp = true,
         TokenEndpointPath = new PathString("/oauth/token"),
         AccessTokenExpireTimeSpan = TimeSpan.FromDays(1),
-        Provider = new Providers.CustomOAuthProvider(Authentication.API.Global.GetContainer().Kernel.Resolve<Infrastructure.Managers.ApplicationUserManager>()),
-        AccessTokenFormat = new Providers.CustomJwtFormat("http://localhost:50378")
+        Provider = new Providers.CustomOAuthProvider(),
+        AccessTokenFormat = new Providers.CustomJwtFormat("http://localhost:59822")
       };
 
       // OAuth 2.0 Bearer Access Token Generation
