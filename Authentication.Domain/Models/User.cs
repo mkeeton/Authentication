@@ -1,5 +1,7 @@
 ﻿using System;
 using Microsoft.AspNet.Identity;
+using System.Security.Claims;
+using System.Collections.Generic;
 
 namespace Authentication.Domain.Models
 {
@@ -17,10 +19,19 @@ namespace Authentication.Domain.Models
     
     public bool EmailConfirmed { get; set; }
 
+    public ICollection<Claim> Claims
+    {
+      get
+      {
+        return new List<Claim>();
+      }
+    }
+
     public class SearchParameters
     {
       public string UserName { get; set; }
       public string Password { get; set; }
     }
+
   }
 }

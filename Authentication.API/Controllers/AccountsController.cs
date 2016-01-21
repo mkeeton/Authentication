@@ -14,8 +14,7 @@ namespace Authentication.API.Controllers
   public class AccountsController : BaseApiController
   {
 
-    public AccountsController(Infrastructure.UnitOfWork unitOfWork)
-      : base(unitOfWork)
+    public AccountsController(Infrastructure.UnitOfWork unitOfWork) : base(unitOfWork)
     {
       this.UnitOfWork = unitOfWork;
     }

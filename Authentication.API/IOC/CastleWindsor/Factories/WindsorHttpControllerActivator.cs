@@ -4,6 +4,7 @@ using System.Web.Http.Controllers;
 using System.Web.Http.Dispatcher;
 using Castle.Windsor;
 
+
 namespace Authentication.API.IOC.CastleWindsor.Factories
 {
   public class WindsorHttpControllerActivator : IHttpControllerActivator
@@ -11,7 +12,7 @@ namespace Authentication.API.IOC.CastleWindsor.Factories
     private readonly IWindsorContainer _container;
     public WindsorHttpControllerActivator(IWindsorContainer container)
     {
-      _container = container;
+    _container = container;
     }
 
     public IHttpController Create(HttpRequestMessage request, HttpControllerDescriptor controllerDescriptor, Type controllerType)

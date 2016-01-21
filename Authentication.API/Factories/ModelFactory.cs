@@ -4,7 +4,6 @@ using System.Linq;
 using System.Web;
 
 using System.Net.Http;
-using System.Web;
 using System.Web.Http.Routing;
 
 using Authentication.Domain.Models;

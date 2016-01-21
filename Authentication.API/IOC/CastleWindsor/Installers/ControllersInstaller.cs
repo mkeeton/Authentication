@@ -7,10 +7,12 @@ using System.Web.Http;
 using Castle.MicroKernel.Registration;
 using Castle.MicroKernel.SubSystems.Configuration;
 using Castle.Windsor;
+using Castle.MicroKernel.Resolvers.SpecializedResolvers;
 using Authentication.Data.Interfaces;
 using Authentication.Data.DbContext;
 using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.Owin;
+using Authentication.Infrastructure.Interfaces;
 
 
 namespace Authentication.API.IOC.CastleWindsor.Installers
@@ -19,9 +21,14 @@ namespace Authentication.API.IOC.CastleWindsor.Installers
   {
     public void Install(IWindsorContainer container, IConfigurationStore store)
     {
+
+      container.Kernel.Resolver.AddSubResolver(new CollectionResolver(container.Kernel, true));
+
       container.Register(Classes.FromThisAssembly()
           .BasedOn<ApiController>()
-          .LifestyleTransient());
+          .LifestyleTransient()
+      );
+
       container.Register(
           Component.For<IDbContext>()
               .UsingFactoryMethod(_ => new DbContextSql(WebConfigurationManager.ConnectionStrings["DefaultConnection"].ConnectionString)).LifestylePerWebRequest()
@@ -34,7 +41,7 @@ namespace Authentication.API.IOC.CastleWindsor.Installers
       //);
 
       container.Register(
-                Component.For<IUserStore<Authentication.Domain.Models.User, System.Guid>>()
+                Component.For<IUserRepository>()
                 .ImplementedBy<Authentication.Infrastructure.Repositories.UserRepository>()
                 .LifeStyle.PerWebRequest
       );

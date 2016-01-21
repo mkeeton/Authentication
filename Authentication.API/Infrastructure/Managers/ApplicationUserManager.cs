@@ -8,6 +8,7 @@ using System.Web;
 using Authentication.Domain.Models;
 using System.Security.Claims;
 using System.Threading.Tasks;
+using Authentication.Infrastructure.Interfaces;
 
 namespace Authentication.API.Infrastructure.Managers
 {
@@ -39,7 +40,7 @@ namespace Authentication.API.Infrastructure.Managers
     public static ApplicationUserManager Create(IdentityFactoryOptions<ApplicationUserManager> options, IOwinContext context)
     {
 
-      var repository = Authentication.API.Global.GetContainer().Kernel.Resolve<IUserStore<User, Guid>>();
+      var repository = Authentication.API.Global.GetContainer().Kernel.Resolve<IUserRepository>();
       var manager = new ApplicationUserManager(repository);
 
       var dataProtectionProvider = options.DataProtectionProvider;

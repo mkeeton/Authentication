@@ -8,7 +8,7 @@ using Microsoft.AspNet.Identity;
 
 namespace Authentication.API.Controllers
 {
-    public class BaseApiController : ApiController
+    public abstract class BaseApiController : ApiController
     {
 
       private Infrastructure.UnitOfWork _unitOfWork;
