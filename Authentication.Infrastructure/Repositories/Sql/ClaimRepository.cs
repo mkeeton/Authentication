@@ -7,7 +7,7 @@ using Authentication.Domain.Models;
 using System.Security.Claims;
 using Authentication.Data.Interfaces;
 
-namespace Authentication.Infrastructure.Repositories
+namespace Authentication.Infrastructure.Repositories.Sql
 {
   public class ClaimRepository : Interfaces.IClaimRepository
   {

@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-using Microsoft.AspNet.Identity;
+//using Microsoft.AspNet.Identity;
 using Authentication.Data.Interfaces;
 using Authentication.Domain.Models;
 
@@ -12,7 +12,6 @@ namespace Authentication.Infrastructure
 {
   public class UnitOfWork : Interfaces.IUnitOfWork
   {
-
     public IDbContext DbContext { get; set; }
 
     //public LoginList CurrentLogins { get; set; }
@@ -33,35 +32,35 @@ namespace Authentication.Infrastructure
 
     public void BeginWork()
     {
-      DbContext.BeginTransaction();
+      //DbContext.BeginTransaction();
     }
 
     public void CommitWork()
     {
-      DbContext.CommitTransaction();
+      //DbContext.CommitTransaction();
     }
 
     public void RollbackWork()
     {
-      DbContext.RollbackTransaction();
+      //DbContext.RollbackTransaction();
     }
-    //public ISessionRepository SessionManager
-    //{
-    //  get;
-    //  set;
-    //}
 
-    //public ILoginRepository LoginManager
-    //{
-    //  get;
-    //  set;
-    //}
-
-    public IUserStore<User, Guid> UserManager
+    public Interfaces.IUserRepository UserStore
     {
       get;
       set;
     }
 
+    public Interfaces.IRoleRepository RoleStore
+    {
+      get;
+      set;
+    }
+
+    public Interfaces.IClaimRepository ClaimStore
+    {
+      get;
+      set;
+    }
   }
 }

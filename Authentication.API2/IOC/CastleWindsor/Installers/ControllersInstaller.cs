@@ -41,13 +41,13 @@ namespace Authentication.API2.IOC.CastleWindsor.Installers
 
       container.Register(
                 Component.For<IUserRepository>()
-                .ImplementedBy<Authentication.Infrastructure.Repositories.UserRepository>()
+                .ImplementedBy<Authentication.Infrastructure.Repositories.Sql.UserRepository>()
                 .LifeStyle.PerWebRequest
       );
 
       container.Register(
                 Component.For<IClaimRepository>()
-                .ImplementedBy<Authentication.Infrastructure.Repositories.ClaimRepository>()
+                .ImplementedBy<Authentication.Infrastructure.Repositories.Sql.ClaimRepository>()
                 .LifeStyle.PerWebRequest
       );
 

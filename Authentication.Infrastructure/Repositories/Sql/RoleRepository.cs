@@ -9,9 +9,9 @@ using System.Data;
 using Authentication.Data.Interfaces;
 using Dapper;
 
-namespace Authentication.Infrastructure.Repositories
+namespace Authentication.Infrastructure.Repositories.Sql
 {
-  public class RoleRepository : IRoleStore<Role,Guid>
+  public class RoleRepository : Interfaces.IRoleRepository
   {
  
     private readonly IDbContext CurrentContext;
