@@ -51,17 +51,6 @@ namespace Authentication.API2
 
       // Plugin the OAuth bearer JSON Web Token tokens generation and Consumption will be here
 
-      //OAuthAuthorizationServerOptions OAuthServerOptions = new OAuthAuthorizationServerOptions()
-      //{
-      //  //For Dev enviroment only (on production should be AllowInsecureHttp = false)
-      //  AllowInsecureHttp = true,
-      //  TokenEndpointPath = new PathString("/oauth/token"),
-      //  AccessTokenExpireTimeSpan = TimeSpan.FromDays(1),
-      //  //Provider = new Providers.CustomOAuthProvider(Authentication.API.Global.GetContainer().Kernel.Resolve<Infrastructure.Managers.ApplicationUserManager>()),
-      //  Provider = new Providers.CustomOAuthProvider(HttpContext.Current.GetOwinContext().GetUserManager<Infrastructure.Managers.ApplicationUserManager>()),
-      //  AccessTokenFormat = new Providers.CustomJwtFormat("http://localhost:50378")
-      //};
-
       OAuthAuthorizationServerOptions OAuthServerOptions = new OAuthAuthorizationServerOptions()
       {
         //For Dev enviroment only (on production should be AllowInsecureHttp = false)

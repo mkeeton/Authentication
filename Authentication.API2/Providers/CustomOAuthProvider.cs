@@ -50,8 +50,9 @@ namespace Authentication.API2.Providers
       ClaimsIdentity oAuthIdentity = await userManager.GenerateUserIdentityAsync(user, "JWT");
       //oAuthIdentity.AddClaims(ExtendedClaimsProvider.GetClaims(user));
       //oAuthIdentity.AddClaims(RolesFromClaims.CreateRolesBasedOnClaims(oAuthIdentity));
-
-      var ticket = new AuthenticationTicket(oAuthIdentity, null);
+      AuthenticationProperties prop = new AuthenticationProperties();
+      prop.Dictionary.Add("TestProperty","Testing");
+      var ticket = new AuthenticationTicket(oAuthIdentity, prop);
 
       context.Validated(ticket);
 
