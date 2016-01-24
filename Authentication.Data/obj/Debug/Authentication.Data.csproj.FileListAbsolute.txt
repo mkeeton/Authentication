@@ -2,3 +2,4 @@ C:\Development\Applications\C\Git\Authentication\Authentication.Data\bin\Debug\A
 C:\Development\Applications\C\Git\Authentication\Authentication.Data\bin\Debug\Authentication.Data.pdb
 C:\Development\Applications\C\Git\Authentication\Authentication.Data\obj\Debug\Authentication.Data.dll
 C:\Development\Applications\C\Git\Authentication\Authentication.Data\obj\Debug\Authentication.Data.pdb
+C:\Development\Applications\C\Git\Authentication\Authentication.Data\obj\Debug\Authentication.Data.csprojResolveAssemblyReference.cache

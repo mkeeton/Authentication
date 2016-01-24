@@ -1,0 +1,39 @@
+﻿<!doctype html>
+<html lang="en" ng-app="authenticationApp">
+<head>
+  <meta charset="utf-8">
+  <title>My HTML File</title>
+  <link rel="stylesheet" href="/Styles/Bootstrap/Bootstrap.css">
+  <link rel="stylesheet" href="/Styles/Shared/General.css">
+  <script src="/Scripts/Angular/angular.min.js"></script>
+  <script src="/Scripts/Angular/angular-route.min.js"></script>
+  <script src="/Controllers/app.js"></script>
+  <script src="/Controllers/controllers.js"></script>
+  <script src="/Scripts/Bootstrap/Bootstrap.js"></script>
+</head>
+<body>
+  <div class="navbar navbar-inverse navbar-fixed-top">
+    <div class="container">
+      <div class="navbar-header">
+        <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+        </button>
+        <h4>Authentication</h4>
+      </div>
+      <div class="navbar-collapse collapse">
+        <ul class="nav navbar-nav">
+          <!--#include file="/Views/Shared/navigation.html" -->
+        </ul>
+      </div>
+    </div>
+  </div>
+  <div class="container body-content">
+    <div ng-view></div>
+    <footer>
+      <p>&copy; @DateTime.Now.Year - Support Tracker</p>
+    </footer>
+  </div>
+</body>
+</html>

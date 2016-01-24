@@ -57,6 +57,14 @@
     <Reference Include="System.EnterpriseServices" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="Fonts\Bootstrap\glyphicons-halflings-regular.eot" />
+    <Content Include="Fonts\Bootstrap\glyphicons-halflings-regular.ttf" />
+    <Content Include="Fonts\Bootstrap\glyphicons-halflings-regular.woff" />
+    <Content Include="Fonts\Bootstrap\glyphicons-halflings-regular.woff2" />
+    <Content Include="Styles\Bootstrap\bootstrap-theme.css.map" />
+    <Content Include="Styles\Bootstrap\bootstrap-theme.min.css.map" />
+    <Content Include="Styles\Bootstrap\bootstrap.css.map" />
+    <Content Include="Styles\Bootstrap\bootstrap.min.css.map" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
@@ -65,10 +73,31 @@
     </None>
   </ItemGroup>
   <ItemGroup>
+    <Content Include="Controllers\app.js" />
+    <Content Include="Controllers\Controllers.js" />
+    <Content Include="Fonts\Bootstrap\glyphicons-halflings-regular.svg" />
+    <Content Include="index.html" />
+    <Content Include="Scripts\Angular\angular-route.min.js" />
+    <Content Include="Scripts\Angular\angular.min.js" />
+    <Content Include="Scripts\Bootstrap\bootstrap.js" />
+    <Content Include="Scripts\Bootstrap\bootstrap.min.js" />
+    <Content Include="Scripts\Bootstrap\npm.js" />
+    <Content Include="Styles\Bootstrap\bootstrap-theme.css" />
+    <Content Include="Styles\Bootstrap\bootstrap-theme.min.css" />
+    <Content Include="Styles\Bootstrap\bootstrap.css" />
+    <Content Include="Styles\Bootstrap\bootstrap.min.css" />
+    <Content Include="Styles\Shared\General.css" />
+    <Content Include="Views\Partials\forgottenPassword.html" />
+    <Content Include="Views\Partials\login.html" />
+    <Content Include="Views\Partials\register.html" />
+    <Content Include="Views\Shared\navigation.html" />
     <Content Include="Web.config" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Properties\AssemblyInfo.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Models\" />
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
