@@ -6,11 +6,11 @@
     <form>
       <div class="form-group">
         <label>Email</label>
-        <input class="form-control" type="text" id="LoginEmailAddress" />
+        <input class="form-control" type="text" id="LoginEmailAddress" ng-model="EmailAddress" />
       </div>
       <div class="form-group">
         <label>Password</label>
-        <input class="form-control" type="password" id="LoginPassword" />
+        <input class="form-control" type="password" id="LoginPassword" ng-model="Password" />
       </div>
       <div class="form-group">
         <button type="submit" class="btn btn-default" onclick="return auth_login();">Log In</button>

@@ -1,13 +1,17 @@
 ﻿var authUserControllers = angular.module('authUserControllers', []);
 
-ISSControllers.controller('LoginController', function ($scope, $http) {
+authUserControllers.controller('LoginController', function ($scope, $http) {
 
 });
 
-ISSControllers.controller('RegisterController', function ($scope, $http) {
+authUserControllers.controller('RegisterController', function ($scope, $http) {
 
 });
 
-ISSControllers.controller('ForgottenPasswordController', function ($scope, $http) {
+authUserControllers.controller('ForgottenPasswordController', function ($scope, $http) {
 
 });
+
+authUserControllers.controller('UserListController', ['$scope', 'User', function ($scope, User) {
+  $scope.users = data;
+}]);
