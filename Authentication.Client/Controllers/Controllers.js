@@ -12,6 +12,8 @@ authUserControllers.controller('ForgottenPasswordController', function ($scope, 
 
 });
 
-authUserControllers.controller('UserListController', ['$scope', 'User', function ($scope, User) {
-  $scope.users = data;
+authUserControllers.controller('UserListController', ['$scope', 'authUserServices', function ($scope, authUserServices) {
+  authUserServices.query(function (data) {
+    $scope.users = data;
+  });
 }]);

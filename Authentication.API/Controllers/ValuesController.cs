@@ -7,13 +7,12 @@ using System.Web.Http;
 
 namespace Authentication.API.Controllers
 {
-    [Authorize]
     public class ValuesController : ApiController
     {
         // GET api/values
         public IEnumerable<string> Get()
         {
-            return new string[] { "value1", "value2" };
+            return new string[] { "value1", "value2", "Screw You", "It Works!!" };
         }
 
         // GET api/values/5

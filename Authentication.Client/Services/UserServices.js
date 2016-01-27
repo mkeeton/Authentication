@@ -1,18 +1,14 @@
-﻿var authUserServices = angular.module('authUserServices', ['ngResource']);
+﻿(function () {
+  "use strict";
 
-authUserServices.factory('User', ['$resource',
-  function ($resource) {
-    return $resource('phones/:phoneId.json', {}, {
-      query: { method: 'GET', params: { emailAddress: 'users' }, isArray: true }
-    });
-  }]);
+  angular
+      .module("CommonServices")
+      .factory("authUserServices",
+              ["$resource",
+               "appSettings",
+                 authUserServices])
 
-authUserServices.service('userService', ['$http', function ($http) {
-  this.getUsers = function ($scope) {
-    return $http({
-      method: "GET",
-      url: "http://localhost:50378/api/values",
-      headers: { 'Content-Type': 'application/json' }
-    });
-  };
-}]);
+  function authUserServices($resource, appSettings) {
+    return $resource(appSettings.serverPath + "/api/values");
+  }
+}());

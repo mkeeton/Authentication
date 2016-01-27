@@ -1,7 +1,7 @@
 ﻿var authenticationApp = angular.module('authenticationApp', [
   'ngRoute',
   'authUserControllers',
-  'authUserServices'
+  'CommonServices'
 ]);
 
 authenticationApp.config(['$routeProvider',

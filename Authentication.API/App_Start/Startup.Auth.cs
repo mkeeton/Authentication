@@ -74,6 +74,8 @@ namespace Authentication.API
 
             var jsonFormatter = httpConfig.Formatters.OfType<JsonMediaTypeFormatter>().First();
             jsonFormatter.SerializerSettings.ContractResolver = new CamelCasePropertyNamesContractResolver();
+
+            app.UseCors(Microsoft.Owin.Cors.CorsOptions.AllowAll);
             // Uncomment the following lines to enable logging in with third party login providers
             //app.UseMicrosoftAccountAuthentication(
             //    clientId: "",
