@@ -48,6 +48,14 @@ namespace Authentication.API.Models
         [Display(Name = "Confirm password")]
         [Compare("Password", ErrorMessage = "The password and confirmation password do not match.")]
         public string ConfirmPassword { get; set; }
+
+        [Required]
+        [Display(Name = "FirstName")]
+        public string FirstName { get; set; }
+
+        [Required]
+        [Display(Name = "LastName")]
+        public string LastName { get; set; }
     }
 
     public class RegisterExternalBindingModel

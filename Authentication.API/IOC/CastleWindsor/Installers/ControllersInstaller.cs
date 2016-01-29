@@ -69,9 +69,14 @@ namespace Authentication.API.IOC.CastleWindsor.Installers
 
       container.Register(
           Component.For<ISecureDataFormat<AuthenticationTicket>>()
-          .ImplementedBy<Providers.CustomJwtFormat>()
-          .LifeStyle.PerWebRequest
+              .UsingFactoryMethod(_ => new Providers.CustomJwtFormat("")).LifestylePerWebRequest()
       );
+
+      //container.Register(
+      //    Component.For<ISecureDataFormat<AuthenticationTicket>>()
+      //    .ImplementedBy<Providers.CustomJwtFormat>()
+      //    .LifeStyle.PerWebRequest
+      //);
 
 
       container.Register(

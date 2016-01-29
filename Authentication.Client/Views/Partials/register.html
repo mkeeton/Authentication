@@ -1,1 +1,151 @@
 ﻿<h1>Register</h1>
+<form class="form-horizontal"
+      name="registrationForm"
+      novalidate
+      ng-controller="RegisterController as vm">
+  <fieldset>
+    <div class="form-group"
+         ng-class="{'has-error':registrationForm.inputEmail.$invalid &&
+                                    registrationForm.inputEmail.$dirty}">
+      <label class="col-md-2 control-label"
+             for="inputEmail">Email</label>
+
+      <div class="col-md-4">
+        <input class="form-control"
+               id="inputEmail"
+               name="inputEmail"
+               type="email"
+               placeholder="Email (required)"
+               ng-model="vm.user.Email"
+               required
+               ng-minlength="6"
+               ng-maxlength="250" />
+      </div>
+      <span class="help-block has-error">
+        <span ng-show="registrationForm.inputEmail.$error.required">
+          Email address is required.
+        </span>
+        <span ng-show="registrationForm.inputEmail.$error.minlength">
+          Email address must be at least 6 characters in length.
+        </span>
+        <span ng-show="registrationForm.inputEmail.$error.maxlength">
+          Email Address cannot exceed 250 characters in length.
+        </span>
+      </span>
+    </div>
+
+    <div class="form-group"
+         ng-class="{'has-error':registrationForm.inputPassword.$invalid &&
+                                    registrationForm.inputPassword.$dirty}">
+      <label class="col-md-2 control-label" for="inputPassword">Password</label>
+
+      <div class="col-md-4">
+        <input class="form-control"
+               id="inputPassword"
+               name="inputPassword"
+               type="password"
+               placeholder="Password (required)"
+               ng-model="vm.user.Password"
+               required>
+      </div>
+      <span class="help-block has-error"
+            ng-show="registrationForm.inputPassword.$invalid ">
+        A password is required
+      </span>
+    </div>
+
+    <div class="form-group"
+         ng-class="{'has-error':registrationForm.inputConfirmPassword.$invalid}">
+      <label class="col-md-2 control-label" for="inputConfirmPassword">Confirm Password</label>
+
+      <div class="col-md-4">
+        <input class="form-control"
+               id="inputConfirmPassword"
+               name="inputConfirmPassword"
+               type="password"
+               placeholder="Confirm Password (required)"
+               ng-model="vm.user.ConfirmPassword"
+               compare-to="vm.user.Password">
+      </div>
+      <span class="help-block has-error"
+            ng-show="registrationForm.inputConfirmPassword.$invalid">
+        Passwords do not match
+      </span>
+    </div>
+
+    <div class="form-group"
+         ng-class="{'has-error':registrationForm.inputFirstName.$invalid &&
+                                    registrationForm.inputFirstName.$dirty}">
+      <label class="col-md-2 control-label"
+             for="inputFirstName">First Name</label>
+
+      <div class="col-md-4">
+        <input class="form-control"
+               id="inputFirstName"
+               name="inputFirstName"
+               type="text"
+               placeholder="First Name (required)"
+               ng-model="vm.user.FirstName"
+               required
+               ng-minlength="1"
+               ng-maxlength="250" />
+      </div>
+      <span class="help-block has-error">
+        <span ng-show="registrationForm.inputFirstName.$error.required">
+          First name is required.
+        </span>
+        <span ng-show="registrationForm.inputFirstName.$error.maxlength">
+          First name cannot exceed 250 characters in length.
+        </span>
+      </span>
+    </div>
+
+    <div class="form-group"
+         ng-class="{'has-error':registrationForm.inputLastName.$invalid &&
+                                    registrationForm.inputLastName.$dirty}">
+      <label class="col-md-2 control-label"
+             for="inputLastName">Last Name</label>
+
+      <div class="col-md-4">
+        <input class="form-control"
+               id="inputLastName"
+               name="inputLastName"
+               type="text"
+               placeholder="Last Name (required)"
+               ng-model="vm.user.LastName"
+               required
+               ng-minlength="1"
+               ng-maxlength="250" />
+      </div>
+      <span class="help-block has-error">
+        <span ng-show="registrationForm.inputLastName.$error.required">
+          Last name is required.
+        </span>
+        <span ng-show="registrationForm.inputLastName.$error.maxlength">
+          Last name cannot exceed 250 characters in length.
+        </span>
+      </span>
+    </div>
+
+    <div class="form-group">
+      <div class="col-md-4 col-md-offset-2">
+        <span>
+          <button class="btn btn-primary"
+                  style="width:80px;margin-right:10px"
+                  ng-click="vm.submit()"
+                  ng-disabled="registrationForm.$invalid">
+            Save
+          </button>
+        </span>
+      </div>
+    </div>
+
+    <div class="form-group"
+         ng-show="vm.message">
+      <div class="col-md-6">
+        <pre style="font: inherit">{{vm.message }}</pre>
+      </div>
+    </div>
+
+  </fieldset>
+</form>

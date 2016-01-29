@@ -63,6 +63,7 @@
     <Content Include="Fonts\Bootstrap\glyphicons-halflings-regular.woff2" />
     <Content Include="Scripts\Angular\angular-resource.min.js" />
     <Content Include="Services\CommonServices.js" />
+    <Content Include="Services\currentUser.js" />
     <Content Include="Services\UserServices.js" />
     <Content Include="Styles\Bootstrap\bootstrap-theme.css.map" />
     <Content Include="Styles\Bootstrap\bootstrap-theme.min.css.map" />
