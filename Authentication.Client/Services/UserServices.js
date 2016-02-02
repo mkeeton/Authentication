@@ -6,9 +6,10 @@
       .factory("authUserServices",
               ["$resource",
                "appSettings",
+               "currentUser",
                  authUserServices])
 
-  function authUserServices($resource, appSettings) {
+  function authUserServices($resource, appSettings, currentUser) {
     return {
       registration : $resource(appSettings.serverPath + "/api/Account/Register",null,
         {
@@ -28,6 +29,15 @@
                                                 encodeURIComponent(data[d]));
                           return str.join("&");
                         }
+
+                      }
+                    }),
+
+      logout: $resource(appSettings.serverPath + "/api/Account/Logout", null,
+                    {
+                      'logout': {
+                        method: 'POST',
+                        headers: { 'Authorization': 'Bearer ' + currentUser.getProfile().token },
 
                       }
                     })

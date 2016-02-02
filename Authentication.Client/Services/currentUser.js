@@ -4,9 +4,10 @@
   angular
       .module("CommonServices")
       .factory("currentUser",
-                currentUser)
+                ['$cookies',currentUser])
 
-  function currentUser() {
+  function currentUser($cookies) {
+
     var profile = {
       isLoggedIn: false,
       username: "",
@@ -16,10 +17,21 @@
     var setProfile = function (username, token) {
       profile.username = username;
       profile.token = token;
-      profile.isLoggedIn = true;
+      if (username == "") {
+        profile.isLoggedIn = false;
+      }
+      else {
+        profile.isLoggedIn = true;
+      }
+      $cookies.putObject('userProfile', profile);
     };
 
     var getProfile = function () {
+      var storedProfile = $cookies.getObject('userProfile');
+      if (storedProfile != undefined)
+      {
+        profile = storedProfile;
+      }
       return profile;
     }
 

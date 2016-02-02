@@ -67,6 +67,14 @@ namespace Authentication.API.Controllers
     [Route("Logout")]
     public IHttpActionResult Logout()
     {
+      ClaimsIdentity userIdent = User.Identity as ClaimsIdentity;
+      foreach(Claim cl in userIdent.Claims)
+      {
+        if(cl.Subject.Name == "authSessionId")
+        {
+          UnitOfWork.UserSessionStore.DeleteAsync(new UserSession() { Id = new Guid(cl.Value), UserId = new Guid(userIdent.GetUserId()) });
+        }
+      }
       Authentication.SignOut(CookieAuthenticationDefaults.AuthenticationType);
       return Ok();
     }
@@ -370,6 +378,21 @@ namespace Authentication.API.Controllers
       return Ok();
     }
 
+    // GET api/Account/UserAccountSummary
+    [HostAuthentication(DefaultAuthenticationTypes.ExternalBearer)]
+    [Route("UserAccountSummary")]
+    [HttpGet]
+    public async Task<UserSummaryViewModel> UserAccountSummary()
+    {
+      var user =  await _unitOfWork.UserStore.FindByIdAsync(new Guid(User.Identity.GetUserId()));
+      return new UserSummaryViewModel
+      {
+        Email = user.Email,
+        FirstName = user.FirstName,
+        LastName = user.LastName,
+      };
+    }
+
     protected override void Dispose(bool disposing)
     {
       if (disposing && UnitOfWork != null)
@@ -380,6 +403,8 @@ namespace Authentication.API.Controllers
 
       base.Dispose(disposing);
     }
+
+
 
     #region Helpers
 

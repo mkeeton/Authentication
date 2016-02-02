@@ -50,11 +50,17 @@ namespace Authentication.API.IOC.CastleWindsor.Installers
                 .LifeStyle.PerWebRequest
       );
 
-      //container.Register(
-      //          Component.For<IClaimRepository>()
-      //          .ImplementedBy<Authentication.Infrastructure.Repositories.ClaimRepository>()
-      //          .LifeStyle.PerWebRequest
-      //);
+      container.Register(
+                Component.For<IUserSessionRepository>()
+                .ImplementedBy<UserSessionRepository>()
+                .LifeStyle.PerWebRequest
+      );
+
+      container.Register(
+                Component.For<IClaimRepository>()
+                .ImplementedBy<Authentication.Infrastructure.Repositories.Sql.ClaimRepository>()
+                .LifeStyle.PerWebRequest
+      );
 
       container.Register(
                 Component.For<Infrastructure.ExtendedUnitOfWork>()

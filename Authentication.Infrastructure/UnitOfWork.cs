@@ -62,5 +62,11 @@ namespace Authentication.Infrastructure
       get;
       set;
     }
+
+    public Interfaces.IUserSessionRepository UserSessionStore
+    {
+      get;
+      set;
+    }
   }
 }

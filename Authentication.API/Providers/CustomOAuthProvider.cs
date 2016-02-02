@@ -31,7 +31,9 @@ namespace Authentication.API.Providers
 
       context.OwinContext.Response.Headers.Add("Access-Control-Allow-Origin", new[] { allowedOrigin });
 
-      var userManager = context.OwinContext.GetUserManager<Infrastructure.Managers.ApplicationUserManager>();
+      Infrastructure.ExtendedUnitOfWork _unitOfWork = Authentication.API.WebApiApplication.GetContainer().Kernel.Resolve<Infrastructure.ExtendedUnitOfWork>();
+
+      var userManager = _unitOfWork.UserManager;//context.OwinContext.GetUserManager<Infrastructure.Managers.ApplicationUserManager>();
 
       User user = await userManager.FindAsync(context.UserName, context.Password);
 
@@ -41,15 +43,18 @@ namespace Authentication.API.Providers
         return;
       }
 
-      if (!user.EmailConfirmed)
-      {
-        context.SetError("invalid_grant", "User did not confirm email.");
-        return;
-      }
+      //if (!user.EmailConfirmed)
+      //{
+      //  context.SetError("invalid_grant", "User did not confirm email.");
+      //  return;
+      //}
 
       ClaimsIdentity oAuthIdentity = await userManager.GenerateUserIdentityAsync(user, "JWT");
-      //oAuthIdentity.AddClaims(ExtendedClaimsProvider.GetClaims(user));
+      oAuthIdentity.AddClaims(_unitOfWork.ClaimStore.GetClaims(user));
       //oAuthIdentity.AddClaims(RolesFromClaims.CreateRolesBasedOnClaims(oAuthIdentity));
+      var currentSession = new UserSession(){UserId=user.Id};
+      await _unitOfWork.UserSessionStore.CreateAsync(currentSession);
+      oAuthIdentity.AddClaim(new Claim("authSessionId",currentSession.Id.ToString()));
       AuthenticationProperties prop = new AuthenticationProperties();
       prop.Dictionary.Add("TestProperty", "Testing");
       var ticket = new AuthenticationTicket(oAuthIdentity, prop);

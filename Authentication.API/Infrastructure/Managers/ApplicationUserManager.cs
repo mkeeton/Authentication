@@ -7,6 +7,7 @@ using Authentication.API.Models;
 using System.Security.Claims;
 using Authentication.Domain.Models;
 using Authentication.Infrastructure.Interfaces;
+using System.Collections.Generic;
 
 namespace Authentication.API.Infrastructure.Managers
 {
@@ -52,5 +53,10 @@ namespace Authentication.API.Infrastructure.Managers
       // Add custom user claims here
       return userIdentity;
     }
+
+    //public async Task<IEnumerable<Claim>> GetClaims(User user)
+    //{
+    // // return await this.Store.
+    //}
   }
 }

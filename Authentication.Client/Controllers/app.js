@@ -1,5 +1,7 @@
 ﻿var authenticationApp = angular.module('authenticationApp', [
   'ngRoute',
+  'ngCookies',
+  'mainController',
   'authUserControllers',
   'CommonServices'
 ]);
@@ -12,19 +14,23 @@ authenticationApp.config(['$routeProvider',
     $routeProvider.
       when('/Register', {
         templateUrl: 'Views/Partials/register.html',
-        controller: 'RegisterController'
+        controller: 'AuthenticationController'
       }).
       when('/ForgottenPassword', {
         templateUrl: 'Views/Partials/forgottenPassword.html',
-        controller: 'ForgottePasswordController'
+        controller: 'AuthenticationController'
       }).
       when('/Users', {
         templateUrl: 'Views/Partials/users.html',
         controller: 'UserListController'
       }).
+      when('/AccountSummary', {
+        templateUrl: 'Views/Partials/accountSummary.html',
+        controller: 'AccountController'
+      }).
       otherwise({
         templateUrl: 'Views/Partials/login.html',
-        controller: 'LoginController'
+        controller: 'AuthenticationController'
       });
 
   }]);

@@ -2,7 +2,7 @@
 <form class="form-horizontal"
       name="registrationForm"
       novalidate
-      ng-controller="RegisterController as vm">
+      ng-controller="AuthenticationController as vm">
   <fieldset>
     <div class="form-group"
          ng-class="{'has-error':registrationForm.inputEmail.$invalid &&
@@ -132,7 +132,7 @@
         <span>
           <button class="btn btn-primary"
                   style="width:80px;margin-right:10px"
-                  ng-click="vm.submit()"
+                  ng-click="vm.register()"
                   ng-disabled="registrationForm.$invalid">
             Save
           </button>

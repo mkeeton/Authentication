@@ -50,7 +50,9 @@ namespace Authentication.API.Providers
 
     public AuthenticationTicket Unprotect(string protectedText)
     {
+
       throw new NotImplementedException();
+
     }
   }
 }

@@ -57,6 +57,7 @@
     <Reference Include="System.EnterpriseServices" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="Controllers\mainController.js" />
     <Content Include="Fonts\Bootstrap\glyphicons-halflings-regular.eot" />
     <Content Include="Fonts\Bootstrap\glyphicons-halflings-regular.ttf" />
     <Content Include="Fonts\Bootstrap\glyphicons-halflings-regular.woff" />
@@ -64,6 +65,7 @@
     <Content Include="Scripts\Angular\angular-resource.min.js" />
     <Content Include="Services\CommonServices.js" />
     <Content Include="Services\currentUser.js" />
+    <Content Include="Services\userAccountServices.js" />
     <Content Include="Services\UserServices.js" />
     <Content Include="Styles\Bootstrap\bootstrap-theme.css.map" />
     <Content Include="Styles\Bootstrap\bootstrap-theme.min.css.map" />
@@ -93,6 +95,7 @@
     <Content Include="Styles\Bootstrap\bootstrap.css" />
     <Content Include="Styles\Bootstrap\bootstrap.min.css" />
     <Content Include="Styles\Shared\General.css" />
+    <Content Include="Views\Partials\accountSummary.html" />
     <Content Include="Views\Partials\forgottenPassword.html" />
     <Content Include="Views\Partials\login.html" />
     <Content Include="Views\Partials\register.html" />

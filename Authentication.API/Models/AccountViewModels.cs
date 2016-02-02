@@ -40,4 +40,13 @@ namespace Authentication.API.Models
 
         public string ProviderKey { get; set; }
     }
+
+    public class UserSummaryViewModel
+    {
+      public string Email { get; set; }
+
+      public string FirstName { get; set; }
+
+      public string LastName { get; set; }
+    }
 }

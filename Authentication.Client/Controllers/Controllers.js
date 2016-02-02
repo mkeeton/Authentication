@@ -1,8 +1,36 @@
 ﻿var authUserControllers = angular.module('authUserControllers', []);
 
-authUserControllers.controller('LoginController', function (authUserServices) {
+authUserControllers.controller('navigationController', ['currentUser', function (currentUser) {
+  var vm = this;
+  vm.user = currentUser.getProfile();
+}]);
+
+authUserControllers.controller('AuthenticationController', ["authUserServices","currentUser",function (authUserServices,currentUser) {
   var vm = this;
   vm.userData = {};
+
+  vm.register = function () {
+    vm.message = '';
+    vm.user.ConfirmPassword = vm.user.Password;
+    authUserServices.registration.register(vm.user,
+        function (data) {
+          vm.originalUser = angular.copy(data);
+
+          vm.message = "Registration Complete";
+          vm.login();
+        },
+        function (response) {
+          vm.message = response.statusText + "\r\n";
+          if (response.data.modelState) {
+            for (var key in response.data.modelState) {
+              vm.message += response.data.modelState[key] + "\r\n";
+            }
+          }
+          if (response.data.exceptionMessage)
+            vm.message += response.data.exceptionMessage;
+        });
+  };
+
   vm.login = function () {
     vm.userData.grant_type = "password";
     vm.userData.userName = vm.userData.email;
@@ -24,41 +52,23 @@ authUserControllers.controller('LoginController', function (authUserServices) {
           }
         });
   }
-});
 
-authUserControllers.controller('RegisterController', function (authUserServices) {
+  vm.forgottenPassword = function () {
+
+  }
+}]);
+
+authUserControllers.controller('AccountController', ['$scope', 'userAccountServices','currentUser', function ($scope, userAccountServices,currentUser) {
   var vm = this;
-  vm.user = {};
-  vm.message = '';
+  vm.user = currentUser.getProfile();
+  vm.userData = {};
+  userAccountServices.query(function (data) {
+    vm.userData = data;
+  });
+}]);
 
-  vm.submit = function () {
-    vm.message = '';
-    vm.user.ConfirmPassword = vm.user.Password;
-    authUserServices.registration.register(vm.user,
-        function (data) {
-          vm.originalUser = angular.copy(data);
-
-          vm.message = "Registration Complete";
-        },
-        function (response) {
-          vm.message = response.statusText + "\r\n";
-          if (response.data.modelState) {
-            for (var key in response.data.modelState) {
-              vm.message += response.data.modelState[key] + "\r\n";
-            }
-          }
-          if (response.data.exceptionMessage)
-            vm.message += response.data.exceptionMessage;
-        });
-  };
-});
-
-authUserControllers.controller('ForgottenPasswordController', function ($scope, $http) {
-
-});
-
-authUserControllers.controller('UserListController', ['$scope', 'authUserServices', function ($scope, authUserServices) {
-  authUserServices.query(function (data) {
+authUserControllers.controller('UserListController', ['$scope', 'userAccountServices', function ($scope, userAccountServices) {
+  userAccountServices.query(function (data) {
     $scope.users = data;
   });
 }]);

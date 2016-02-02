@@ -1,3 +1,5 @@
-﻿  <li><a href="#/">Login</a></li>
-  <li><a href="#/Register">Register</a></li>
-  <li><a href="#/ForgottenPassword">Forgotten Password</a></li>
+﻿  <li ng-switch-default><a href="#/">Login</a></li>
+  <li ng-switch-default><a href="#/Register">Register</a></li>
+  <li ng-switch-default><a href="#/ForgottenPassword">Forgotten Password</a></li>
+  <li ng-switch-when="true"><a href="#/AccountSummary">Account summary</a></li>
+  <li ng-switch-when="true"><a href="#/" ng-click="vm.logout()">Log Out</a></li>

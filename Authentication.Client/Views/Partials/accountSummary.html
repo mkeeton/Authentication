@@ -1,0 +1,111 @@
+﻿<h1>Account Summary</h1>
+<form class="form-horizontal"
+      name="accountSummaryForm"
+      novalidate
+      ng-controller="AccountController as vm">
+  <fieldset>
+    <div class="form-group"
+         ng-class="{'has-error':accountSummaryForm.inputEmail.$invalid &&
+                                    accountSummaryForm.inputEmail.$dirty}">
+      <label class="col-md-2 control-label"
+             for="inputEmail">Email</label>
+
+      <div class="col-md-4">
+        <input class="form-control"
+               id="inputEmail"
+               name="inputEmail"
+               type="email"
+               placeholder="Email (required)"
+               ng-model="vm.userData.Email"
+               required
+               ng-minlength="6"
+               ng-maxlength="250" />
+      </div>
+      <span class="help-block has-error">
+        <span ng-show="accountSummaryForm.inputEmail.$error.required">
+          Email address is required.
+        </span>
+        <span ng-show="accountSummaryForm.inputEmail.$error.minlength">
+          Email address must be at least 6 characters in length.
+        </span>
+        <span ng-show="accountSummaryForm.inputEmail.$error.maxlength">
+          Email Address cannot exceed 250 characters in length.
+        </span>
+      </span>
+    </div>
+
+    <div class="form-group"
+         ng-class="{'has-error':accountSummaryForm.inputFirstName.$invalid &&
+                                    accountSummaryForm.inputFirstName.$dirty}">
+      <label class="col-md-2 control-label"
+             for="inputFirstName">First Name</label>
+
+      <div class="col-md-4">
+        <input class="form-control"
+               id="inputFirstName"
+               name="inputFirstName"
+               type="text"
+               placeholder="First Name (required)"
+               ng-model="vm.userData.FirstName"
+               required
+               ng-minlength="1"
+               ng-maxlength="250" />
+      </div>
+      <span class="help-block has-error">
+        <span ng-show="accountSummaryForm.inputFirstName.$error.required">
+          First name is required.
+        </span>
+        <span ng-show="accountSummaryForm.inputFirstName.$error.maxlength">
+          First name cannot exceed 250 characters in length.
+        </span>
+      </span>
+    </div>
+
+    <div class="form-group"
+         ng-class="{'has-error':accountSummaryForm.inputLastName.$invalid &&
+                                    accountSummaryForm.inputLastName.$dirty}">
+      <label class="col-md-2 control-label"
+             for="inputLastName">Last Name</label>
+
+      <div class="col-md-4">
+        <input class="form-control"
+               id="inputLastName"
+               name="inputLastName"
+               type="text"
+               placeholder="Last Name (required)"
+               ng-model="vm.userData.LastName"
+               required
+               ng-minlength="1"
+               ng-maxlength="250" />
+      </div>
+      <span class="help-block has-error">
+        <span ng-show="accountSummaryForm.inputLastName.$error.required">
+          Last name is required.
+        </span>
+        <span ng-show="accountSummaryForm.inputLastName.$error.maxlength">
+          Last name cannot exceed 250 characters in length.
+        </span>
+      </span>
+    </div>
+
+    <!--<div class="form-group">
+      <div class="col-md-4 col-md-offset-2">
+        <span>
+          <button class="btn btn-primary"
+                  style="width:80px;margin-right:10px"
+                  ng-click="vm.register()"
+                  ng-disabled="registrationForm.$invalid">
+            Save
+          </button>
+        </span>
+      </div>
+    </div>-->
+
+    <div class="form-group"
+         ng-show="vm.message">
+      <div class="col-md-6">
+        <pre style="font: inherit">{{vm.message }}</pre>
+      </div>
+    </div>
+  </fieldset>
+</form>
