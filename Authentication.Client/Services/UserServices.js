@@ -36,11 +36,15 @@
       logout: $resource(appSettings.serverPath + "/api/Account/Logout", null,
                     {
                       'logout': {
-                        method: 'POST',
-                        headers: { 'Authorization': 'Bearer ' + currentUser.getProfile().token },
-
+                        method: 'POST'
                       }
-                    })
+                    }),
+
+      changePassword: $resource(appSettings.serverPath + "/api/Account/ChangePassword", null,
+              {
+                'changePassword': { method: 'POST' }
+              }
+            )
     }
   }
 }());

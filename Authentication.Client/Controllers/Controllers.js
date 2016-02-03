@@ -1,11 +1,6 @@
 ﻿var authUserControllers = angular.module('authUserControllers', []);
 
-authUserControllers.controller('navigationController', ['currentUser', function (currentUser) {
-  var vm = this;
-  vm.user = currentUser.getProfile();
-}]);
-
-authUserControllers.controller('AuthenticationController', ["authUserServices","currentUser",function (authUserServices,currentUser) {
+authUserControllers.controller('AuthenticationController', ["$location","authUserServices","currentUser",function ($location,authUserServices,currentUser) {
   var vm = this;
   vm.userData = {};
 
@@ -40,6 +35,7 @@ authUserControllers.controller('AuthenticationController', ["authUserServices","
           vm.message = "";
           vm.password = "";
           currentUser.setProfile(vm.userData.userName, data.access_token);
+          $location.url("/AccountSummary");
         },
         function (response) {
           vm.password = "";
@@ -56,11 +52,32 @@ authUserControllers.controller('AuthenticationController', ["authUserServices","
   vm.forgottenPassword = function () {
 
   }
+
+  vm.changePassword = function () {
+    vm.message = '';
+    authUserServices.changePassword.changePassword(vm.user,
+        function (data) {
+          vm.originalUser = angular.copy(data);
+          vm.user.OldPassword = "";
+          vm.user.NewPassword = "";
+          vm.user.ConfirmPassword = "";
+          vm.message = "Password Changed";
+        },
+        function (response) {
+          vm.message = response.statusText + "\r\n";
+          if (response.data.modelState) {
+            for (var key in response.data.modelState) {
+              vm.message += response.data.modelState[key] + "\r\n";
+            }
+          }
+          if (response.data.exceptionMessage)
+            vm.message += response.data.exceptionMessage;
+        });
+  };
 }]);
 
-authUserControllers.controller('AccountController', ['$scope', 'userAccountServices','currentUser', function ($scope, userAccountServices,currentUser) {
+authUserControllers.controller('AccountController', ['userAccountServices', function (userAccountServices) {
   var vm = this;
-  vm.user = currentUser.getProfile();
   vm.userData = {};
   userAccountServices.query(function (data) {
     vm.userData = data;

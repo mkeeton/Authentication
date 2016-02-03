@@ -70,9 +70,10 @@ namespace Authentication.API.Controllers
       ClaimsIdentity userIdent = User.Identity as ClaimsIdentity;
       foreach(Claim cl in userIdent.Claims)
       {
-        if(cl.Subject.Name == "authSessionId")
+        if(cl.Type == "authSessionId")
         {
           UnitOfWork.UserSessionStore.DeleteAsync(new UserSession() { Id = new Guid(cl.Value), UserId = new Guid(userIdent.GetUserId()) });
+          break;
         }
       }
       Authentication.SignOut(CookieAuthenticationDefaults.AuthenticationType);

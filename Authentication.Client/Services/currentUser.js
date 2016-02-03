@@ -10,12 +10,12 @@
 
     var profile = {
       isLoggedIn: false,
-      username: "",
+      userName: "",
       token: ""
     };
 
     var setProfile = function (username, token) {
-      profile.username = username;
+      profile.userName = username;
       profile.token = token;
       if (username == "") {
         profile.isLoggedIn = false;
@@ -37,7 +37,9 @@
 
     return {
       setProfile: setProfile,
-      getProfile: getProfile
+      getProfile: getProfile,
+      isLoggedIn: function () { return profile.isLoggedIn; },
+      userName: function () { return profile.userName;}
     }
   }
 })();

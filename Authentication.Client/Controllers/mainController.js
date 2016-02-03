@@ -1,21 +1,27 @@
 ﻿var mainController = angular.module('mainController', []);
 
-mainController.controller('mainController', ['authUserServices', 'currentUser', function (authUserServices,currentUser) {
-  var vm = this;
-  vm.user = currentUser.getProfile();
+mainController.controller('mainNavController', ['$scope','$location','authUserServices', 'currentUser', function ($scope,$location,authUserServices,currentUser) {
+  var vmNav = this;
+  vmNav.user = currentUser.getProfile();
 
-  vm.logout = function () {
+  $scope.$watch(currentUser.userName, function (userName) {
+    vmNav.user = currentUser.getProfile();
+    //console.log("Username changed to " + vmNav.user.userName);
+  });
+
+  vmNav.logout = function () {
     authUserServices.logout.logout(null,
         function (data) {
           currentUser.setProfile("", "");
+          $location.url("/");
         },
         function (response) {
-          vm.message = response.statusText + "\r\n";
+          vmNav.message = response.statusText + "\r\n";
           if (response.data.exceptionMessage)
-            vm.message += response.data.exceptionMessage;
+            vmNav.message += response.data.exceptionMessage;
 
           if (response.data.error) {
-            vm.message += response.data.error;
+            vmNav.message += response.data.error;
           }
         });
   }

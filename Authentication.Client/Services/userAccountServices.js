@@ -12,9 +12,7 @@
   function userAccountServices($resource, appSettings, currentUser) {
     return $resource(appSettings.serverPath + "/api/account/UserAccountSummary", null,
         {
-          query : {
-            headers: { 'Authorization': 'Bearer ' + currentUser.getProfile().token }
-          }
+          query : { method: 'GET' }
         });
   }
 }());

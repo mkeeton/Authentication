@@ -19,7 +19,7 @@
   <script src="/Services/userAccountServices.js"></script>
   <script src="/Scripts/Bootstrap/Bootstrap.js"></script>
 </head>
-<body ng-controller="mainController as vm">
+<body ng-controller="mainNavController as vmNav">
   <div class="navbar navbar-inverse navbar-fixed-top">
     <div class="container">
       <div class="navbar-header">
@@ -31,7 +31,7 @@
         <h4>Authentication</h4>
       </div>
       <div class="navbar-collapse collapse">
-        <ul class="nav navbar-nav" ng-switch="vm.user.isLoggedIn">
+        <ul class="nav navbar-nav" ng-switch="vmNav.user.isLoggedIn">
           <!--#include file="/Views/Shared/navigation.html" -->
         </ul>
       </div>
