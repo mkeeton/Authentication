@@ -2,7 +2,7 @@
 
 authUserControllers.controller('AuthenticationController', ["$location","authUserServices","currentUser",function ($location,authUserServices,currentUser) {
   var vm = this;
-  vm.userData = {};
+  vm.user = {};
 
   vm.register = function () {
     vm.message = '';
@@ -27,14 +27,14 @@ authUserControllers.controller('AuthenticationController', ["$location","authUse
   };
 
   vm.login = function () {
-    vm.userData.grant_type = "password";
-    vm.userData.userName = vm.userData.email;
+    vm.user.grant_type = "password";
+    vm.user.UserName = vm.user.Email;
 
-    authUserServices.login.login(vm.userData,
+    authUserServices.login.login(vm.user,
         function (data) {
           vm.message = "";
           vm.password = "";
-          currentUser.setProfile(vm.userData.userName, data.access_token);
+          currentUser.setProfile(vm.user.UserName, data.access_token);
           $location.url("/AccountSummary");
         },
         function (response) {
@@ -74,14 +74,31 @@ authUserControllers.controller('AuthenticationController', ["$location","authUse
             vm.message += response.data.exceptionMessage;
         });
   };
-}]);
 
-authUserControllers.controller('AccountController', ['userAccountServices', function (userAccountServices) {
-  var vm = this;
-  vm.userData = {};
-  userAccountServices.query(function (data) {
-    vm.userData = data;
-  });
+  vm.loadAccount = function () {
+    authUserServices.loadAccount.query(function (data) {
+      vm.user = data;
+      vm.user.originalEmail = vm.user.Email;
+    });
+  };
+
+  vm.updateAccount = function () {
+    vm.message = '';
+    authUserServices.updateAccount.updateAccount(vm.user,
+        function (data) {
+          vm.login();
+        },
+        function (response) {
+          vm.message = response.statusText + "\r\n";
+          if (response.data.modelState) {
+            for (var key in response.data.modelState) {
+              vm.message += response.data.modelState[key] + "\r\n";
+            }
+          }
+          if (response.data.exceptionMessage)
+            vm.message += response.data.exceptionMessage;
+        });
+  };
 }]);
 
 authUserControllers.controller('UserListController', ['$scope', 'userAccountServices', function ($scope, userAccountServices) {

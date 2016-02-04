@@ -39,7 +39,7 @@ authenticationApp.config(['$routeProvider', '$locationProvider', '$httpProvider'
     $httpProvider.interceptors.push('APIInterceptor');
   }])
 
-  .service('APIInterceptor', ['$rootScope', 'currentUser', function ($rootScope, currentUser) {
+  .service('APIInterceptor', ['$location', 'currentUser', function ($location, currentUser) {
     var service = this;
 
     service.request = function (config) {
@@ -52,11 +52,11 @@ authenticationApp.config(['$routeProvider', '$locationProvider', '$httpProvider'
       return config;
     };
 
-  //  //service.responseError = function (response) {
-  //  //  if (response.status === 401) {
-  //  //    $rootScope.$broadcast('unauthorized');
-  //  //  }
-  //  //  return response;
-  //  //};
+    service.responseError = function (response) {
+      if (response.status === 401) {
+        $location.url("/");
+      }
+      return response;
+    };
   }])
 ;

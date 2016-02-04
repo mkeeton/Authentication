@@ -16,7 +16,6 @@
   <script src="/Services/CommonServices.js"></script>
   <script src="/Services/currentUser.js"></script>
   <script src="/Services/UserServices.js"></script>
-  <script src="/Services/userAccountServices.js"></script>
   <script src="/Scripts/Bootstrap/Bootstrap.js"></script>
 </head>
 <body ng-controller="mainNavController as vmNav">
@@ -40,7 +39,7 @@
   <div class="container body-content">
     <div ng-view></div>
     <footer>
-      <p>&copy; @DateTime.Now.Year - Support Tracker</p>
+      <p>&copy; {{vmNav.date | date:'yyyy'}} - Authentication</p>
     </footer>
   </div>
 </body>

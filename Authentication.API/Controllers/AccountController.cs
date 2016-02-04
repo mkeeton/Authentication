@@ -383,15 +383,15 @@ namespace Authentication.API.Controllers
     [HostAuthentication(DefaultAuthenticationTypes.ExternalBearer)]
     [Route("UserAccountSummary")]
     [HttpGet]
-    public async Task<UserSummaryViewModel> UserAccountSummary()
+    public async Task<IHttpActionResult> UserAccountSummary()
     {
       var user =  await _unitOfWork.UserStore.FindByIdAsync(new Guid(User.Identity.GetUserId()));
-      return new UserSummaryViewModel
+      return Ok(new UserSummaryViewModel
       {
         Email = user.Email,
         FirstName = user.FirstName,
         LastName = user.LastName,
-      };
+      });
     }
 
     protected override void Dispose(bool disposing)

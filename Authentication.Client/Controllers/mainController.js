@@ -4,6 +4,8 @@ mainController.controller('mainNavController', ['$scope','$location','authUserSe
   var vmNav = this;
   vmNav.user = currentUser.getProfile();
 
+  vmNav.date = new Date();
+
   $scope.$watch(currentUser.userName, function (userName) {
     vmNav.user = currentUser.getProfile();
     //console.log("Username changed to " + vmNav.user.userName);

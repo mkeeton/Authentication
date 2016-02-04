@@ -2,7 +2,9 @@
 <form class="form-horizontal"
       name="accountSummaryForm"
       novalidate
-      ng-controller="AccountController as vm">
+      ng-controller="AuthenticationController as vm"
+      ng-init="vm.loadAccount()"
+      >
   <fieldset>
     <div class="form-group"
          ng-class="{'has-error':accountSummaryForm.inputEmail.$invalid &&
@@ -16,7 +18,7 @@
                name="inputEmail"
                type="email"
                placeholder="Email (required)"
-               ng-model="vm.userData.Email"
+               ng-model="vm.user.Email"
                required
                ng-minlength="6"
                ng-maxlength="250" />
@@ -35,6 +37,21 @@
     </div>
 
     <div class="form-group"
+         ng-show="vm.user.Email!=vm.user.originalEmail "
+         ng-class="{'has-error':accountSummaryForm.inputEmail!=vm.userData.originalEmail && loginForm.inputPassword.$invalid}">
+      <label class="col-md-2 control-label" for="inputPassword">Enter your password to update e-mail address</label>
+
+      <div class="col-md-4">
+        <input class="form-control"
+               id="inputPassword"
+               name="inputPassword"
+               type="password"
+               placeholder="Password"
+               ng-model="vm.user.Password">
+      </div>
+    </div>
+
+    <div class="form-group"
          ng-class="{'has-error':accountSummaryForm.inputFirstName.$invalid &&
                                     accountSummaryForm.inputFirstName.$dirty}">
       <label class="col-md-2 control-label"
@@ -46,7 +63,7 @@
                name="inputFirstName"
                type="text"
                placeholder="First Name (required)"
-               ng-model="vm.userData.FirstName"
+               ng-model="vm.user.FirstName"
                required
                ng-minlength="1"
                ng-maxlength="250" />
@@ -73,7 +90,7 @@
                name="inputLastName"
                type="text"
                placeholder="Last Name (required)"
-               ng-model="vm.userData.LastName"
+               ng-model="vm.user.LastName"
                required
                ng-minlength="1"
                ng-maxlength="250" />
@@ -88,18 +105,18 @@
       </span>
     </div>
 
-    <!--<div class="form-group">
+    <div class="form-group">
       <div class="col-md-4 col-md-offset-2">
         <span>
           <button class="btn btn-primary"
                   style="width:80px;margin-right:10px"
-                  ng-click="vm.register()"
-                  ng-disabled="registrationForm.$invalid">
-            Save
+                  ng-click="vm.updateAccount()"
+                  ng-disabled="accountSummaryForm.$invalid">
+            Update
           </button>
         </span>
       </div>
-    </div>-->
+    </div>
 
     <div class="form-group"
          ng-show="vm.message">
