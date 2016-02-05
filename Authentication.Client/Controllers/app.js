@@ -52,11 +52,11 @@ authenticationApp.config(['$routeProvider', '$locationProvider', '$httpProvider'
       return config;
     };
 
-    service.responseError = function (response) {
-      if (response.status === 401) {
-        $location.url("/");
-      }
-      return response;
-    };
+    //service.responseError = function (response) {
+    //  if (response.status === 401) {
+    //    $location.url("/");
+    //  }
+    //  //return response;
+    //};
   }])
 ;

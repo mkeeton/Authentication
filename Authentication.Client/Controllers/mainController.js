@@ -8,11 +8,10 @@ mainController.controller('mainNavController', ['$scope','$location','authUserSe
 
   $scope.$watch(currentUser.userName, function (userName) {
     vmNav.user = currentUser.getProfile();
-    //console.log("Username changed to " + vmNav.user.userName);
   });
 
   vmNav.logout = function () {
-    authUserServices.logout.logout(null,
+    authUserServices.logout.logoutUser(null,
         function (data) {
           currentUser.setProfile("", "");
           $location.url("/");

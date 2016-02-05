@@ -1,6 +1,6 @@
 ﻿var authUserControllers = angular.module('authUserControllers', []);
 
-authUserControllers.controller('AuthenticationController', ["$location","authUserServices","currentUser",function ($location,authUserServices,currentUser) {
+authUserControllers.controller('AuthenticationController', ["$location","authUserServices","userAccountServices","currentUser",function ($location,authUserServices,userAccountServices,currentUser) {
   var vm = this;
   vm.user = {};
 
@@ -24,21 +24,21 @@ authUserControllers.controller('AuthenticationController', ["$location","authUse
           if (response.data.exceptionMessage)
             vm.message += response.data.exceptionMessage;
         });
-  };
+  }
 
   vm.login = function () {
     vm.user.grant_type = "password";
     vm.user.UserName = vm.user.Email;
-
-    authUserServices.login.login(vm.user,
+    console.log(vm.user);
+    authUserServices.login.loginUser(vm.user,
         function (data) {
           vm.message = "";
-          vm.password = "";
+          vm.user.Password = "";
           currentUser.setProfile(vm.user.UserName, data.access_token);
           $location.url("/AccountSummary");
         },
         function (response) {
-          vm.password = "";
+          vm.user.Password = "";
           vm.message = response.statusText + "\r\n";
           if (response.data.exceptionMessage)
             vm.message += response.data.exceptionMessage;
@@ -55,7 +55,7 @@ authUserControllers.controller('AuthenticationController', ["$location","authUse
 
   vm.changePassword = function () {
     vm.message = '';
-    authUserServices.changePassword.changePassword(vm.user,
+    userAccountServices.changePassword.changePassword(vm.user,
         function (data) {
           vm.originalUser = angular.copy(data);
           vm.user.OldPassword = "";
@@ -73,20 +73,26 @@ authUserControllers.controller('AuthenticationController', ["$location","authUse
           if (response.data.exceptionMessage)
             vm.message += response.data.exceptionMessage;
         });
-  };
+  }
 
   vm.loadAccount = function () {
-    authUserServices.loadAccount.query(function (data) {
-      vm.user = data;
+    userAccountServices.loadAccount.query(function (data) {
+      console.log("hello");
+      vm.user.Email = data.Email;
+      vm.user.FirstName = data.FirstName;
+      vm.user.LastName = data.LastName;
       vm.user.originalEmail = vm.user.Email;
     });
-  };
+  }
 
   vm.updateAccount = function () {
     vm.message = '';
-    authUserServices.updateAccount.updateAccount(vm.user,
+    vm.user.UserName = vm.user.Email;
+    userAccountServices.updateAccount.updateAccount(vm.user,
         function (data) {
-          vm.login();
+          if (vm.user.Email != vm.user.originalEmail) {
+              vm.login();
+          }
         },
         function (response) {
           vm.message = response.statusText + "\r\n";
@@ -98,7 +104,7 @@ authUserControllers.controller('AuthenticationController', ["$location","authUse
           if (response.data.exceptionMessage)
             vm.message += response.data.exceptionMessage;
         });
-  };
+  }
 }]);
 
 authUserControllers.controller('UserListController', ['$scope', 'userAccountServices', function ($scope, userAccountServices) {

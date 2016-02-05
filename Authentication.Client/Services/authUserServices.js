@@ -6,11 +6,10 @@
       .factory("authUserServices",
               ["$resource",
                "appSettings",
-               "currentUser",
                  authUserServices])
 
 
-  function authUserServices($resource, appSettings, currentUser) {
+  function authUserServices($resource, appSettings) {
     return {
       registration : $resource(appSettings.serverPath + "/api/Account/Register",null,
         {
@@ -20,7 +19,7 @@
 
       login: $resource(appSettings.serverPath + "/Token", null,
                     {
-                      'login': {
+                      'loginUser': {
                         method: 'POST',
                         headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
                         transformRequest: function (data, headersGetter) {
@@ -32,31 +31,16 @@
                         }
 
                       }
-                    }),
+                    }
+      ),
 
       logout: $resource(appSettings.serverPath + "/api/Account/Logout", null,
                     {
-                      'logout': {
+                      'logoutUser': {
                         method: 'POST'
                       }
-                    }),
-
-      changePassword: $resource(appSettings.serverPath + "/api/Account/ChangePassword", null,
-              {
-                'changePassword': { method: 'POST' }
-              }
-            ),
-
-      loadAccount: $resource(appSettings.serverPath + "/api/account/UserAccountSummary", null,
-        {
-          query : { method: 'GET' }
-        }),
-
-      updateAccount: $resource(appSettings.serverPath + "/api/Account/UpdateAccount", null,
-              {
-                'updateAccount': { method: 'POST' }
-              }
-            )
+                    }
+      )
     }
   }
-}());
+})();

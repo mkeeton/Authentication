@@ -394,6 +394,44 @@ namespace Authentication.API.Controllers
       });
     }
 
+    // POST api/Account/ChangePassword
+    [Route("UpdateAccount")]
+    public async Task<IHttpActionResult> UpdateAccount(UpdateAccountBindingModel model)
+    {
+      if (!ModelState.IsValid)
+      {
+        return BadRequest(ModelState);
+      }
+      User user = await UnitOfWork.UserStore.FindByIdAsync(new Guid(User.Identity.GetUserId()));
+      if ((model.Email != user.Email) && (model.Password != null) && (model.Password.Trim() != ""))
+      {
+        if(await UnitOfWork.UserManager.CheckPasswordAsync(user,model.Password) == true)
+        {
+          user.Email = model.Email;
+          user.UserName = user.Email;
+          user.EmailConfirmed = false;
+        }
+        else
+        {
+          return BadRequest("The provided password was incorrect");
+        }
+      }
+      else
+      {
+        return BadRequest("You must provide your password in order to change your email address");
+      }
+      user.FirstName=model.FirstName;
+      user.LastName=model.LastName;
+      IdentityResult result = UnitOfWork.UserManager.Update(user);
+
+      if (!result.Succeeded)
+      {
+        return GetErrorResult(result);
+      }
+
+      return Ok();
+    }
+
     protected override void Dispose(bool disposing)
     {
       if (disposing && UnitOfWork != null)
