@@ -29,6 +29,15 @@ namespace Authentication.Infrastructure.Repositories.Sql
 
     }
 
+    public virtual Task<List<Role>> ListAsync()
+    {
+      return Task.Factory.StartNew(() =>
+      {
+        using (IDbConnection connection = CurrentContext.OpenConnection())
+          return connection.Query<Role>("select * from auth_Roles", new { }).AsList();
+      });
+    }
+
     public virtual Task CreateAsync(Role role)
     {
       if (role == null)

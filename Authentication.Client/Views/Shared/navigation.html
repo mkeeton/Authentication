@@ -1,6 +1,19 @@
 ﻿  <li ng-switch-default><a href="#/">Login</a></li>
   <li ng-switch-default><a href="#/Register">Register</a></li>
   <li ng-switch-default><a href="#/ForgottenPassword">Forgotten Password</a></li>
-  <li ng-switch-when="true"><a href="#/AccountSummary">Account Summary</a></li>
-  <li ng-switch-when="true"><a href="#/ChangePassword">Change Password</a></li>
-  <li ng-switch-when="true"><a href="#/" ng-click="vmNav.logout()">Log Out</a></li>
+  <li ng-switch-when="true" class="dropdown">
+    <a class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">User Management<span class="caret"></span></a>
+    <ul class="dropdown-menu">
+      <li><a href="#/Users">Users</a></li>
+      <li><a href="#/Roles">Roles</a></li>
+    </ul>
+  </li>
+  <li ng-switch-when="true" class="dropdown">
+    <a class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Account<span class="caret"></span></a>
+    <ul class="dropdown-menu">
+      <li><a href="#/AccountSummary">Account Summary</a></li>
+      <li><a href="#/ChangePassword">Change Password</a></li>
+      <li class="divider"></li>
+      <li><a href="#/" ng-click="vmNav.logout()">Log Out</a></li>
+    </ul>
+  </li>

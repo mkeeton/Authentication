@@ -29,7 +29,6 @@ authUserControllers.controller('AuthenticationController', ["$location","authUse
   vm.login = function () {
     vm.user.grant_type = "password";
     vm.user.UserName = vm.user.Email;
-    console.log(vm.user);
     authUserServices.login.loginUser(vm.user,
         function (data) {
           vm.message = "";
@@ -77,7 +76,6 @@ authUserControllers.controller('AuthenticationController', ["$location","authUse
 
   vm.loadAccount = function () {
     userAccountServices.loadAccount.query(function (data) {
-      console.log("hello");
       vm.user.Email = data.Email;
       vm.user.FirstName = data.FirstName;
       vm.user.LastName = data.LastName;
@@ -91,7 +89,23 @@ authUserControllers.controller('AuthenticationController', ["$location","authUse
     userAccountServices.updateAccount.updateAccount(vm.user,
         function (data) {
           if (vm.user.Email != vm.user.originalEmail) {
-              vm.login();
+
+            authUserServices.logout.logoutUser(null,
+                function (data) {
+                  currentUser.setProfile("", "");
+                  vm.user.originalEmail = vm.user.Email;
+                  vm.login();
+                },
+                function (response) {
+                  vm.message = response.statusText + "\r\n";
+                  if (response.data.exceptionMessage)
+                    vm.message += response.data.exceptionMessage;
+
+                  if (response.data.error) {
+                    vm.message += response.data.error;
+                  }
+                });
+            
           }
         },
         function (response) {
@@ -107,10 +121,46 @@ authUserControllers.controller('AuthenticationController', ["$location","authUse
   }
 }]);
 
-authUserControllers.controller('UserListController', ['$scope', 'userAccountServices', function ($scope, userAccountServices) {
-  userAccountServices.query(function (data) {
-    $scope.users = data;
-  });
+authUserControllers.controller('UserListController', ['$scope','$uibModal', 'userManagementService', function ($scope, $uibModal, userManagementService) {
+  var vm = this;
+
+  vm.LoadUserList = function (size) {
+    userManagementService.query(function (data) {
+      vm.users = data;
+    });
+  }
+
+  vm.open = function (userId,size) {
+    var modalInstance = $uibModal.open({
+      animation: 'true',
+      templateUrl: 'Views/Partials/UserManagement/userDetails.html',
+      controller: 'UserDetailsController',
+      controllerAs: 'vm',
+      size: size,
+      resolve: {
+        userId: function () {
+          return userId;
+        }
+      }
+    });
+  }
+}]);
+
+authUserControllers.controller('UserDetailsController', ['$scope', '$uibModalInstance', 'userManagementService', 'userId', function ($scope, $uibModalInstance, userManagementService, userId) {
+  var vm = this;
+
+  vm.loadUser = function () {
+    userManagementService.get({ id: userId },
+        function (data) {
+          vm.user = data;
+        },
+        function (response) {
+          vm.message = response.statusText + "\r\n";
+          if (response.data.exceptionMessage)
+            vm.message += response.data.exceptionMessage;
+        });
+  }
+
 }]);
 
 var compareTo = function () {

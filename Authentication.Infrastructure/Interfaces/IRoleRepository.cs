@@ -10,6 +10,6 @@ namespace Authentication.Infrastructure.Interfaces
 {
   public interface IRoleRepository : IRoleStore<Role,Guid>
   {
-
+    Task<List<Role>> ListAsync();
   }
 }

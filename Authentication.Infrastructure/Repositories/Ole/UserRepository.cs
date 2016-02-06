@@ -28,6 +28,15 @@ namespace Authentication.Infrastructure.Repositories.Ole
 
     }
 
+    public virtual Task<List<User>> ListAsync()
+    {
+      return Task.Factory.StartNew(() =>
+      {
+        using (IDbConnection connection = CurrentContext.OpenConnection())
+          return connection.Query<User>("select * from auth_Users", new { }).AsList();
+      });
+    }
+
     #region IUserStore
     public virtual Task CreateAsync(User user)
     {

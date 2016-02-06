@@ -10,6 +10,6 @@ namespace Authentication.Infrastructure.Interfaces
 {
   public interface IUserRepository : IRepository, IUserStore<User, Guid>, IUserLoginStore<User, Guid>, IUserPasswordStore<User, Guid>, IUserSecurityStampStore<User, Guid>, IUserEmailStore<User, Guid>, IUserRoleStore<User, Guid>
   {
-
+    Task<List<User>> ListAsync();
   }
 }

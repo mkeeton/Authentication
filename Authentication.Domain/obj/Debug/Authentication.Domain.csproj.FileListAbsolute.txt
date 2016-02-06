@@ -4,4 +4,3 @@ C:\Development\Applications\C\Git\Authentication\Authentication.Domain\bin\Debug
 C:\Development\Applications\C\Git\Authentication\Authentication.Domain\bin\Debug\Microsoft.AspNet.Identity.Core.xml
 C:\Development\Applications\C\Git\Authentication\Authentication.Domain\obj\Debug\Authentication.Domain.dll
 C:\Development\Applications\C\Git\Authentication\Authentication.Domain\obj\Debug\Authentication.Domain.pdb
-C:\Development\Applications\C\Git\Authentication\Authentication.Domain\obj\Debug\Authentication.Domain.csprojResolveAssemblyReference.cache

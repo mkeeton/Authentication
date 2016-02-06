@@ -1,6 +1,8 @@
 ﻿var authenticationApp = angular.module('authenticationApp', [
   'ngRoute',
   'ngCookies',
+  'ngDragDrop',
+  'ui.bootstrap',
   'mainController',
   'authUserControllers',
   'CommonServices'
@@ -21,7 +23,11 @@ authenticationApp.config(['$routeProvider', '$locationProvider', '$httpProvider'
         controller: 'AuthenticationController'
       }).
       when('/Users', {
-        templateUrl: 'Views/Partials/users.html',
+        templateUrl: 'Views/Partials/UserManagement/users.html',
+        controller: 'UserListController'
+      }).
+      when('/Roles', {
+        templateUrl: 'Views/Partials/UserManagement/roles.html',
         controller: 'UserListController'
       }).
       when('/AccountSummary', {
