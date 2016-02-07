@@ -26,5 +26,18 @@ namespace Authentication.API.Models
     public string FirstName { get; set; }
 
     public string LastName { get; set; }
+
+    public List<UserRoleViewModel> AssignedRoles { get; set;}
+
+    public List<UserRoleViewModel> AvailableRoles { get; set;}
+  }
+
+  public class UserRoleViewModel
+  {
+    public Guid RoleId { get; set;}
+
+    public string RoleName { get; set;}
+
+    public string RoleDescription { get; set;}
   }
 }

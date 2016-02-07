@@ -37,6 +37,24 @@ namespace Authentication.Infrastructure.Repositories.Ole
       });
     }
 
+    public virtual Task<List<Role>> AvailableRolesForUserAsync(User user)
+    {
+      return Task.Factory.StartNew(() =>
+      {
+        using (IDbConnection connection = CurrentContext.OpenConnection())
+          return connection.Query<Role>("select R.* from auth_Roles R LEFT JOIN auth_UserRoles UR ON UR.RoleId=R.Id AND UR.UserId=@UserId WHERE UR.Id IS NULL ORDER BY R.RoleName", new { UserId = user.Id }).AsList();
+      });
+    }
+
+    public virtual Task<List<Role>> AssignedRolesForUserAsync(User user)
+    {
+      return Task.Factory.StartNew(() =>
+      {
+        using (IDbConnection connection = CurrentContext.OpenConnection())
+          return connection.Query<Role>("select R.* from auth_Roles R INNER JOIN auth_UserRoles UR ON UR.RoleId=R.Id AND UR.UserId=@UserId ORDER BY R.Name", new { UserId = user.Id }).AsList();
+      });
+    }
+
     #region IUserStore
     public virtual Task CreateAsync(User user)
     {

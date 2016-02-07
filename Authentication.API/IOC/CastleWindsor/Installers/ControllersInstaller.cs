@@ -51,6 +51,12 @@ namespace Authentication.API.IOC.CastleWindsor.Installers
       );
 
       container.Register(
+          Component.For<IRoleRepository>()
+          .ImplementedBy<RoleRepository>()
+          .LifeStyle.PerWebRequest
+      );
+
+      container.Register(
                 Component.For<IUserSessionRepository>()
                 .ImplementedBy<UserSessionRepository>()
                 .LifeStyle.PerWebRequest

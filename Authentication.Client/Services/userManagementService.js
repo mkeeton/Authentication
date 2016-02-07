@@ -8,17 +8,30 @@
                "appSettings",
                   userManagementService])
 
+  angular
+      .module("CommonServices")
+      .factory("roleManagementService",
+              ["$resource",
+               "appSettings",
+                  roleManagementService])
+
   function userManagementService($resource, appSettings) {
     return $resource(appSettings.serverPath + "/api/User/:id", null,
         {
           'get': {
           },
 
-          'save': {
+          'save': { method: 'POST' }
+        });
+  }
+
+  function roleManagementService($resource, appSettings) {
+    return $resource(appSettings.serverPath + "/api/Roles/:id", null,
+        {
+          'get': {
           },
 
-          'update': {
-            method: 'PUT',
+          'save': {
           }
         });
   }

@@ -124,7 +124,7 @@ authUserControllers.controller('AuthenticationController', ["$location","authUse
 authUserControllers.controller('UserListController', ['$scope','$uibModal', 'userManagementService', function ($scope, $uibModal, userManagementService) {
   var vm = this;
 
-  vm.LoadUserList = function (size) {
+  vm.LoadUserList = function () {
     userManagementService.query(function (data) {
       vm.users = data;
     });
@@ -143,10 +143,16 @@ authUserControllers.controller('UserListController', ['$scope','$uibModal', 'use
         }
       }
     });
+
+    modalInstance.result.then(function () {
+      vm.LoadUserList();
+    }, function () {
+      vm.LoadUserList();
+    });
   }
 }]);
 
-authUserControllers.controller('UserDetailsController', ['$scope', '$uibModalInstance', 'userManagementService', 'userId', function ($scope, $uibModalInstance, userManagementService, userId) {
+authUserControllers.controller('UserDetailsController', ['$scope', '$uibModalInstance', 'userManagementService', 'roleManagementService', 'userId', function ($scope, $uibModalInstance, userManagementService, roleManagementService, userId) {
   var vm = this;
 
   vm.loadUser = function () {
@@ -156,6 +162,23 @@ authUserControllers.controller('UserDetailsController', ['$scope', '$uibModalIns
         },
         function (response) {
           vm.message = response.statusText + "\r\n";
+          if (response.data.exceptionMessage)
+            vm.message += response.data.exceptionMessage;
+        });
+  }
+
+  vm.updateAccount = function () {
+    userManagementService.save(vm.user,
+        function (data) {
+          $uibModalInstance.close();
+        },
+        function (response) {
+          vm.message = response.statusText + "\r\n";
+          if (response.data.modelState) {
+            for (var key in response.data.modelState) {
+              vm.message += response.data.modelState[key] + "\r\n";
+            }
+          }
           if (response.data.exceptionMessage)
             vm.message += response.data.exceptionMessage;
         });

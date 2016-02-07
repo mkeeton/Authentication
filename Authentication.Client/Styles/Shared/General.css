@@ -15,3 +15,10 @@ select,
 textarea {
     max-width: 280px;
 }
+
+.thumbnails{min-width:50px;margin-left:-20px;list-style:none;*zoom:1}
+.thumbnails:before,.thumbnails:after{display:table;line-height:0;content:""}
+.thumbnails:after{clear:both}.row-fluid .thumbnails{margin-left:0}
+.thumbnails>li{float:left;margin-bottom:20px;margin-left:20px}
+
+.thumbnail{width:200px;}
