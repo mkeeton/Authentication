@@ -40,4 +40,24 @@ namespace Authentication.API.Models
 
     public string RoleDescription { get; set;}
   }
+
+  public class RoleViewModel
+  {
+    public Guid Id { get; set; }
+
+    public string RoleName { get; set; }
+
+    public string RoleDescription { get; set; }
+
+    public List<Models.ApiViewModel> AssignedApis { get; set; }
+
+    public List<Models.ApiViewModel> AvailableApis { get; set; }
+  }
+
+  public class ApiViewModel
+  {
+    public string Path { get; set;}
+
+    public string HttpMethod { get; set;}
+  }
 }

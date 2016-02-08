@@ -5,6 +5,7 @@
   'ui.bootstrap',
   'mainController',
   'authUserControllers',
+  'roleControllers',
   'CommonServices'
 ]);
 
@@ -28,7 +29,8 @@ authenticationApp.config(['$routeProvider', '$locationProvider', '$httpProvider'
       }).
       when('/Roles', {
         templateUrl: 'Views/Partials/UserManagement/roles.html',
-        controller: 'UserListController'
+        controller: 'roleListController',
+        controllerAs: 'vm'
       }).
       when('/AccountSummary', {
         templateUrl: 'Views/Partials/accountSummary.html'

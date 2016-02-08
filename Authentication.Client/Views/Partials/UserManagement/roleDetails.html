@@ -1,0 +1,102 @@
+﻿<style>
+  .thumbnail {
+    height: 280px !important;
+    overflow:auto;
+    overflow-x:visible;
+  }
+
+  .btn-droppable {
+    width: 180px;
+    min-height: 30px;
+    padding-left: 4px;
+    overflow-wrap:break-word;
+    white-space:normal;
+  }
+
+  .btn-draggable {
+    width: 160px;
+    min-height: 30px;
+    overflow-wrap:break-word;
+    white-space:normal;
+  }
+</style>
+<form class="form-horizontal"
+      name="roleForm"
+      novalidate
+      ng-init="vm.loadRole()">
+  <h1>{{vm.role.RoleName}}</h1>
+  <fieldset>
+    <div class="row">
+      <div class="col-xs-6">
+        <div class="form-group"
+             ng-class="{'has-error':roleForm.inputRoleName.$invalid &&
+                                    roleForm.inputRoleName.$dirty}">
+          <label class="col-md-4 control-label"
+                 for="inputRoleName">Role Name</label>
+
+          <div class="col-md-7">
+            <input class="form-control"
+                   id="inputRoleName"
+                   name="inputRoleName"
+                   type="text"
+                   placeholder="Role Name (required)"
+                   ng-model="vm.role.RoleName"
+                   required
+                   ng-minlength="1"
+                   ng-maxlength="250" />
+          </div>
+          <span class="help-block has-error">
+            <span ng-show="roleForm.inputRoleName.$error.required">
+              Role name is required.
+            </span>
+            <span ng-show="roleForm.inputLastName.$error.maxlength">
+              Role name cannot exceed 250 characters in length.
+            </span>
+          </span>
+        </div>
+      </div>
+      <div class="col-xs-6">
+        <div class="row">
+          <ul class="thumbnails">
+            <li class="span3" style='margin-left:10px;'>
+              <div class="thumbnail" data-drop="true" ng-model='vm.role.AssignedApis' data-jqyoui-options="{accept:'.btn-draggable:not([ng-model=vm.role.AssignedApis])'}" jqyoui-droppable="{multiple:true}">
+                <div class="caption">
+                  <div class="btn btn-info btn-draggable" ng-repeat="item in vm.role.AssignedApis" ng-show="item.Path + ' (' + item.HttpMethod + ')'" data-drag="true" data-jqyoui-options="{revert: 'invalid'}" ng-model="vm.role.AssignedApis" jqyoui-draggable="{index: {{$index}},animate:true}">{{item.Path}} ({{item.HttpMethod}})</div>
+                </div>
+              </div>
+            </li>
+            <li class="span3" style='margin-left:10px;'>
+              <div class="thumbnail" data-drop="true" ng-model='vm.role.AvailableApis' data-jqyoui-options="{accept:'.btn-draggable:not([ng-model=vm.role.AvailableApis])'}" jqyoui-droppable="{multiple:true}">
+                <div class="caption">
+                  <div class="btn btn-info btn-draggable" ng-repeat="item in vm.role.AvailableApis" ng-show="item.Path + ' (' + item.HttpMethod + ')'" data-drag="true" data-jqyoui-options="{revert: 'invalid'}" ng-model="vm.role.AvailableApis" jqyoui-draggable="{index: {{$index}},animate:true}">{{item.Path}} ({{item.HttpMethod}})</div>
+                </div>
+              </div>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </div>
+    <div class="row">
+      <div class="form-group">
+        <div class="col-md-4 col-md-offset-2">
+          <span>
+            <button class="btn btn-primary"
+                    style="width:80px;margin-right:10px"
+                    ng-click="vm.updateRole()"
+                    ng-disabled="roleForm.$invalid">
+              Update
+            </button>
+          </span>
+        </div>
+      </div>
+    </div>
+    <div class="row">
+      <div class="form-group"
+           ng-show="vm.message">
+        <div class="col-md-6">
+          <pre style="font: inherit">{{vm.message }}</pre>
+        </div>
+      </div>
+    </div>
+  </fieldset>
+</form>

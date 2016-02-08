@@ -1,9 +1,27 @@
-﻿<!DOCTYPE html>
-<html xmlns="http://www.w3.org/1999/xhtml">
-<head>
-    <title></title>
-</head>
-<body>
+﻿<div class="panel panel-primary"
+     ng-init="vm.LoadRoleList()">
+  <div class="panel-heading"
+       style="font-size:large">
+    <h1>Roles</h1>
+  </div>
 
-</body>
-</html>
+  <div class="panel-body">
+    <table class="table">
+
+      <thead>
+        <tr>
+          <td>Role Name</td>
+          <td>Description</td>
+          <td></td>
+        </tr>
+      </thead>
+      <tbody>
+        <tr ng-repeat="role in vm.roles">
+          <td>{{ role.Name}}</td>
+          <td>{{ role.Description }}</td>
+          <td><i class="fa fa-pencil-square-o" style="font-size:2em; cursor:pointer;" ng-click="vm.open(role.Id,'lg')"></i></td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>

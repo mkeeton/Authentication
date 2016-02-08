@@ -58,6 +58,7 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="Controllers\mainController.js" />
+    <Content Include="Controllers\roleControllers.js" />
     <Content Include="Fonts\Bootstrap\glyphicons-halflings-regular.eot" />
     <Content Include="Fonts\Bootstrap\glyphicons-halflings-regular.ttf" />
     <Content Include="Fonts\Bootstrap\glyphicons-halflings-regular.woff" />
@@ -912,6 +913,7 @@
     <Content Include="Views\Partials\forgottenPassword.html" />
     <Content Include="Views\Partials\login.html" />
     <Content Include="Views\Partials\register.html" />
+    <Content Include="Views\Partials\UserManagement\roleDetails.html" />
     <Content Include="Views\Partials\UserManagement\roles.html" />
     <Content Include="Views\Partials\UserManagement\userDetails.html" />
     <Content Include="Views\Partials\UserManagement\users.html" />
