@@ -1,8 +1,8 @@
 ﻿var authenticationApp = angular.module('authenticationApp', [
   'ngRoute',
   'ngCookies',
-  'ngDragDrop',
   'ui.bootstrap',
+  'dndLists',
   'mainController',
   'authUserControllers',
   'roleControllers',

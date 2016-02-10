@@ -84,6 +84,8 @@
     <Content Include="Scripts\Angular\angular-cookies.js" />
     <Content Include="Scripts\Angular\angular-cookies.min.js" />
     <Content Include="Scripts\Angular\angular-csp.css" />
+    <Content Include="Scripts\Angular\angular-drag-and-drop-lists.js" />
+    <Content Include="Scripts\Angular\angular-drag-and-drop-lists.min.js" />
     <Content Include="Scripts\Angular\angular-dragdrop.js" />
     <Content Include="Scripts\Angular\angular-dragdrop.min.js" />
     <Content Include="Scripts\Angular\angular-loader.js" />
@@ -908,6 +910,7 @@
     <Content Include="Styles\jQueryUI\jquery-ui.theme.css" />
     <Content Include="Styles\jQueryUI\jquery-ui.theme.min.css" />
     <Content Include="Styles\Shared\General.css" />
+    <Content Include="Styles\Shared\SimpleDragDrop.css" />
     <Content Include="Views\Partials\accountSummary.html" />
     <Content Include="Views\Partials\changePassword.html" />
     <Content Include="Views\Partials\forgottenPassword.html" />
