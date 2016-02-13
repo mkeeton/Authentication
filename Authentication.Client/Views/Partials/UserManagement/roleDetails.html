@@ -1,25 +1,40 @@
 ﻿<style>
   .thumbnail {
     height: 280px !important;
-    overflow:auto;
-    overflow-x:visible;
+    overflow: auto;
+    overflow-x: visible !important;
   }
 
   .btn-droppable {
     width: 180px;
     min-height: 30px;
     padding-left: 4px;
-    overflow-wrap:break-word;
-    white-space:normal;
+    overflow-wrap: break-word;
+    white-space: normal;
   }
 
   .btn-draggable {
     width: 160px;
     min-height: 30px;
-    overflow-wrap:break-word;
-    white-space:normal;
+    overflow-wrap: break-word;
+    white-space: normal;
   }
+
+  .panel-body {
+    height: 300px;
+    overflow-y: scroll;
+  }
+
+    .panel-body ul {
+      height: 280px;
+    }
 </style>
+<script type="text/javascript">
+
+  $(document).ready(function () {
+    openStartTab('', "topLevel");
+  });
+</script>
 <form class="form-horizontal"
       name="roleForm"
       novalidate
@@ -33,7 +48,6 @@
                                     roleForm.inputRoleName.$dirty}">
           <label class="col-md-4 control-label"
                  for="inputRoleName">Role Name</label>
-
           <div class="col-md-7">
             <input class="form-control"
                    id="inputRoleName"
@@ -56,43 +70,100 @@
         </div>
       </div>
       <div class="col-xs-6">
+        <div class="row">
 
-        <div class="simpleDragDrop row">
-          <div class="col-md-6">
-            <div class="panel panel-info">
-              <div class="panel-heading">
-                <h3 class="panel-title">Assigned</h3>
-              </div>
-              <div class="panel-body">
-                <ul dnd-list="vm.role.AssignedApis">
-                  <li ng-repeat="item in vm.role.AssignedApis"
-                      dnd-draggable="item"
-                      dnd-moved="vm.role.AssignedApis.splice($index, 1)"
-                      dnd-effect-allowed="move"
-                      dnd-selected="models.selected = item"
-                      ng-class="{'selected': models.selected === item}">
-                    {{item.Path}} ({{item.HttpMethod}})
-                  </li>
-                </ul>
-              </div>
+
+          <div class="tabSuperCtl topLevel">
+            <div class="tabHeader topLevel">
+              <ul>
+                <li id="clientAccessTabBtn" class="tabHeaderBtn topLevel defaultTab" onclick="openTab(this,'topLevel');">Client Menu Access</li>
+                <li id="apiAccessTabBtn" class="tabHeaderBtn topLevel" onclick="openTab(this,'topLevel');">API Access</li>
+              </ul>
             </div>
-          </div>
-          <div class="col-md-6">
-            <div class="panel panel-info">
-              <div class="panel-heading">
-                <h3 class="panel-title">Available</h3>
+            <div class="tabBody topLevel">
+              <div id="clientAccessTab" class="tabCtl topLevel defaultTab">
+                <div class="simpleDragDrop row">
+                  <div class="col-md-6">
+                    <div class="panel panel-info">
+                      <div class="panel-heading">
+                        <h3 class="panel-title">Assigned</h3>
+                      </div>
+                      <div class="panel-body">
+                        <ul dnd-list="vm.role.AssignedClientPaths">
+                          <li ng-repeat="item in vm.role.AssignedClientPaths"
+                              dnd-draggable="item"
+                              dnd-moved="vm.role.AssignedClientPaths.splice($index, 1)"
+                              dnd-effect-allowed="move"
+                              dnd-selected="models.selected = item"
+                              ng-class="{'selected': models.selected === item}">
+                            {{item.Path}}
+                          </li>
+                        </ul>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="col-md-6">
+                    <div class="panel panel-info">
+                      <div class="panel-heading">
+                        <h3 class="panel-title">Available</h3>
+                      </div>
+                      <div class="panel-body">
+                        <ul dnd-list="vm.role.AvailableClientPaths">
+                          <li ng-repeat="item in vm.role.AvailableClientPaths"
+                              dnd-draggable="item"
+                              dnd-moved="vm.role.AvailableClientPaths.splice($index, 1)"
+                              dnd-effect-allowed="move"
+                              dnd-selected="models.selected = item"
+                              ng-class="{'selected': models.selected === item}">
+                            {{item.Path}}
+                          </li>
+                        </ul>
+                      </div>
+                    </div>
+                  </div>
+                </div>
               </div>
-              <div class="panel-body">
-                <ul dnd-list="vm.role.AvailableApis">
-                  <li ng-repeat="item in vm.role.AvailableApis"
-                      dnd-draggable="item"
-                      dnd-moved="vm.role.AvailableApis.splice($index, 1)"
-                      dnd-effect-allowed="move"
-                      dnd-selected="models.selected = item"
-                      ng-class="{'selected': models.selected === item}">
-                    {{item.Path}} ({{item.HttpMethod}})
-                  </li>
-                </ul>
+              <div id="apiAccessTab" class="tabCtl topLevel">
+                <div class="simpleDragDrop row">
+                  <div class="col-md-6">
+                    <div class="panel panel-info">
+                      <div class="panel-heading">
+                        <h3 class="panel-title">Assigned</h3>
+                      </div>
+                      <div class="panel-body">
+                        <ul dnd-list="vm.role.AssignedApis">
+                          <li ng-repeat="item in vm.role.AssignedApis"
+                              dnd-draggable="item"
+                              dnd-moved="vm.role.AssignedApis.splice($index, 1)"
+                              dnd-effect-allowed="move"
+                              dnd-selected="models.selected = item"
+                              ng-class="{'selected': models.selected === item}">
+                            {{item.Path}} ({{item.HttpMethod}})
+                          </li>
+                        </ul>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="col-md-6">
+                    <div class="panel panel-info">
+                      <div class="panel-heading">
+                        <h3 class="panel-title">Available</h3>
+                      </div>
+                      <div class="panel-body">
+                        <ul dnd-list="vm.role.AvailableApis">
+                          <li ng-repeat="item in vm.role.AvailableApis"
+                              dnd-draggable="item"
+                              dnd-moved="vm.role.AvailableApis.splice($index, 1)"
+                              dnd-effect-allowed="move"
+                              dnd-selected="models.selected = item"
+                              ng-class="{'selected': models.selected === item}">
+                            {{item.Path}} ({{item.HttpMethod}})
+                          </li>
+                        </ul>
+                      </div>
+                    </div>
+                  </div>
+                </div>
               </div>
             </div>
           </div>

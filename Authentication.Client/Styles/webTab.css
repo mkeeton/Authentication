@@ -1,0 +1,45 @@
+﻿
+.tabHeader {
+    color: white;
+    padding: 0;
+    text-align: left;
+}
+
+.tabHeaderBtn {
+    text-align: center;
+    background-color: #002878;
+    min-width: 75px;
+    padding: 3px 10px 3px 10px;
+    border-top-left-radius: 10px;
+    border-top-right-radius: 10px;
+}
+
+.tabHeaderBtn:hover {
+    background-color: #A8E9F7;
+    color: black;
+    cursor: pointer;
+}
+
+.tabHeader ul {
+    margin: 10px 0 0 0 !important;
+    padding: 0 !important;
+}
+
+.tabHeader ul li {
+    list-style: none !important;
+    display: inline-block;
+}
+
+.activeTab {
+    background-color: #A8E9F7;
+    color: black;
+}
+
+.tabBody { 
+    background: url('/images/tabBg.jpg') repeat-x #FFFFFF !important;
+    border-color:#A8E9F7;
+    border-style:solid;
+    border-width:2px;
+    padding: 10px;
+    border-top-right-radius: 10px;
+}

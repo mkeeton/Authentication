@@ -248,6 +248,7 @@
     <Compile Include="Areas\HelpPage\SampleGeneration\SampleDirection.cs" />
     <Compile Include="Areas\HelpPage\SampleGeneration\TextSample.cs" />
     <Compile Include="Areas\HelpPage\XmlDocumentationProvider.cs" />
+    <Compile Include="Attributes\AuthorizeUserAttribute.cs" />
     <Compile Include="Controllers\AccountController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\RolesController.cs" />
@@ -345,6 +346,10 @@
     <ProjectReference Include="..\Authentication.Domain\Authentication.Domain.csproj">
       <Project>{9314913b-f78f-488d-8d3e-757ac3ab14c7}</Project>
       <Name>Authentication.Domain</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Authentication.Framework\Authentication.Framework.csproj">
+      <Project>{3c6a9987-0297-430e-8a7a-4e5814f2a65d}</Project>
+      <Name>Authentication.Framework</Name>
     </ProjectReference>
     <ProjectReference Include="..\Authentication.Infrastructure\Authentication.Infrastructure.csproj">
       <Project>{2ddb7731-4165-4b5f-ac5a-6da743c09347}</Project>

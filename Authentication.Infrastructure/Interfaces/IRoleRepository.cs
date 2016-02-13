@@ -10,6 +10,17 @@ namespace Authentication.Infrastructure.Interfaces
 {
   public interface IRoleRepository : IRoleStore<Role,Guid>
   {
+
     Task<List<Role>> ListAsync();
+
+    Task<List<Role>> GetRolesForActionAndMethod(string currentAction, string currentMethod);
+
+    Task<List<RoleApiPath>> ListRoleApiPathsAsync(Guid roleId);
+
+    Task CreateRoleApiPathAsync(RoleApiPath rolePath);
+
+    Task<RoleApiPath> FindRoleApiPathAsync(Guid roleId, string actionPath, string actionMethod);
+
+    Task DeleteRoleApiPathAsync(Guid ApiPathId);
   }
 }

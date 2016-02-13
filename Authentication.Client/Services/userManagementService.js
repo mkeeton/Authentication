@@ -31,8 +31,7 @@
           'get': {
           },
 
-          'save': {
-          }
+          'save': { method: 'POST' }
         });
   }
 }());

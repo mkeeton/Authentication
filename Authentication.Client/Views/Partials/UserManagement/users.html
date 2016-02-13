@@ -1,0 +1,30 @@
+﻿<div class="panel panel-primary"
+     ng-controller="UserListController as vm"
+     ng-init="vm.LoadUserList()">
+  <div class="panel-heading"
+       style="font-size:large">
+    <h1>Users</h1>
+  </div>
+
+  <div class="panel-body">
+    <table class="table">
+
+      <thead>
+        <tr>
+          <td>Email</td>
+          <td>First Name</td>
+          <td>Last Name</td>
+          <td></td>
+        </tr>
+      </thead>
+      <tbody>
+        <tr ng-repeat="user in vm.users">
+          <td>{{ user.Email}}</td>
+          <td>{{ user.FirstName }}</td>
+          <td>{{ user.LastName }}</td>
+          <td><i class="fa fa-pencil-square-o" style="font-size:2em; cursor:pointer;" ng-click="vm.open(user.Id,'lg')"></i></td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>

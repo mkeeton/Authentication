@@ -27,18 +27,19 @@ namespace Authentication.API.Models
 
     public string LastName { get; set; }
 
-    public List<UserRoleViewModel> AssignedRoles { get; set;}
+    public List<UserRoleViewModel> AssignedRoles { get; set; }
 
-    public List<UserRoleViewModel> AvailableRoles { get; set;}
+    public List<UserRoleViewModel> AvailableRoles { get; set; }
   }
 
   public class UserRoleViewModel
   {
-    public Guid RoleId { get; set;}
 
-    public string RoleName { get; set;}
+    public Guid RoleId { get; set; }
 
-    public string RoleDescription { get; set;}
+    public string RoleName { get; set; }
+
+    public string RoleDescription { get; set; }
   }
 
   public class RoleViewModel
@@ -52,12 +53,27 @@ namespace Authentication.API.Models
     public List<Models.ApiViewModel> AssignedApis { get; set; }
 
     public List<Models.ApiViewModel> AvailableApis { get; set; }
+
+    public List<Models.ClientPathViewModel> AvailableClientPaths { get; set; }
+
+    public List<Models.ClientPathViewModel> AssignedClientPaths { get; set; }
   }
 
   public class ApiViewModel
   {
-    public string Path { get; set;}
+    public Guid Id { get; set; }
 
-    public string HttpMethod { get; set;}
+    public string Path { get; set; }
+
+    public string HttpMethod { get; set; }
+  }
+
+  public class ClientPathViewModel
+  {
+    public Guid Id { get; set; }
+
+    public string Client { get; set; }
+
+    public string Path { get; set; }
   }
 }

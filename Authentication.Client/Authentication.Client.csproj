@@ -852,6 +852,7 @@
     <Content Include="Scripts\jQueryUI\jquery-ui.js" />
     <Content Include="Scripts\jQueryUI\jquery-ui.min.js" />
     <Content Include="Scripts\UIBootstrap\ui-bootstrap-tpls-1.1.2.min.js" />
+    <Content Include="Scripts\webTab.js" />
     <Content Include="Services\CommonServices.js" />
     <Content Include="Services\currentUser.js" />
     <Content Include="Services\userAccountServices.js" />
@@ -911,6 +912,7 @@
     <Content Include="Styles\jQueryUI\jquery-ui.theme.min.css" />
     <Content Include="Styles\Shared\General.css" />
     <Content Include="Styles\Shared\SimpleDragDrop.css" />
+    <Content Include="Styles\webTab.css" />
     <Content Include="Views\Partials\accountSummary.html" />
     <Content Include="Views\Partials\changePassword.html" />
     <Content Include="Views\Partials\forgottenPassword.html" />

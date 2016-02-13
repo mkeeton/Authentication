@@ -106,5 +106,68 @@ namespace Authentication.Infrastructure.Repositories.Ole
           connection.Execute("update auth_Roles set Name = @Name where Id = @Id", role);
       });
     }
+
+    public virtual Task<List<Role>> GetRolesForActionAndMethod(string currentAction, string currentMethod)
+    {
+      return Task.Factory.StartNew(() =>
+      {
+        using (IDbConnection connection = CurrentContext.OpenConnection())
+          return connection.Query<Role>("select * from auth_Roles R INNER JOIN auth_RoleApiPaths RAP ON R.ID=RAP.RoleId WHERE RAP.ActionPath=@CurrentAction AND RAP.ActionMethod=@CurrentMethod", new { CurrentAction = currentAction, CurrentMethod = currentMethod }).AsList();
+      });
+    }
+
+    public virtual Task<List<RoleApiPath>> ListRoleApiPathsAsync(Guid roleId)
+    {
+      return Task.Factory.StartNew(() =>
+      {
+        using (IDbConnection connection = CurrentContext.OpenConnection())
+          return connection.Query<RoleApiPath>("select * from auth_RoleApiPaths WHERE RoleId=@RoleId", new { roleId }).AsList();
+      });
+    }
+
+    public virtual Task CreateRoleApiPathAsync(RoleApiPath rolePath)
+    {
+      if (rolePath == null)
+        throw new ArgumentNullException("rolePath");
+      var owner = this.FindRoleApiPathAsync(rolePath.RoleId, rolePath.ActionPath, rolePath.ActionMethod);
+      if ((owner == null) || (owner.Result == null))
+      {
+        return Task.Factory.StartNew(() =>
+        {
+          rolePath.Id = Guid.NewGuid();
+          using (IDbConnection connection = CurrentContext.OpenConnection())
+            connection.Execute("insert into auth_RoleApiPaths(Id, RoleId, ActionPath, ActionMethod) values(@Id, @RoleId, @ActionPath, @ActionMethod)", rolePath);
+        });
+      }
+      else
+      {
+        rolePath.Id = owner.Result.Id;
+        return Task.FromResult(0);
+      }
+    }
+
+    public virtual Task<RoleApiPath> FindRoleApiPathAsync(Guid roleId, string actionPath, string actionMethod)
+    {
+      //if (string.IsNullOrWhiteSpace(roleName))
+      //  throw new ArgumentNullException("roleName");
+
+      return Task.Factory.StartNew(() =>
+      {
+        using (IDbConnection connection = CurrentContext.OpenConnection())
+          return connection.Query<RoleApiPath>("select * from auth_RoleApiPaths where RoleId=@RoleId AND lower(ActionPath)=lower(@ActionPath) AND lower(ActionMethod)=lower(@ActionMethod)", new { RoleId = roleId, ActionPath = actionPath, ActionMethod = actionMethod }).SingleOrDefault();
+      });
+    }
+
+    public virtual Task DeleteRoleApiPathAsync(Guid ApiPathId)
+    {
+      if (ApiPathId == Guid.Empty)
+        throw new ArgumentNullException("ApiPathId");
+
+      return Task.Factory.StartNew(() =>
+      {
+        using (IDbConnection connection = CurrentContext.OpenConnection())
+          connection.Execute("delete from auth_RoleApiPaths where Id = @Id", new { Id = ApiPathId });
+      });
+    }
   }
 }
