@@ -1,4 +1,0 @@
-C:\Development\Applications\C\Git\Authentication\Authentication.Framework\bin\Debug\Authentication.Framework.dll
-C:\Development\Applications\C\Git\Authentication\Authentication.Framework\bin\Debug\Authentication.Framework.pdb
-C:\Development\Applications\C\Git\Authentication\Authentication.Framework\obj\Debug\Authentication.Framework.dll
-C:\Development\Applications\C\Git\Authentication\Authentication.Framework\obj\Debug\Authentication.Framework.pdb

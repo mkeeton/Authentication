@@ -1,6 +1,0 @@
-C:\Development\Applications\C\Git\Authentication\Authentication.Client\bin\Authentication.Client.dll.config
-C:\Development\Applications\C\Git\Authentication\Authentication.Client\bin\Authentication.Client.dll
-C:\Development\Applications\C\Git\Authentication\Authentication.Client\bin\Authentication.Client.pdb
-C:\Development\Applications\C\Git\Authentication\Authentication.Client\obj\Debug\Authentication.Client.dll
-C:\Development\Applications\C\Git\Authentication\Authentication.Client\obj\Debug\Authentication.Client.pdb
-C:\Development\Applications\C\Git\Authentication\Authentication.Client\obj\Debug\Authentication.Client.csprojResolveAssemblyReference.cache
