@@ -8,6 +8,7 @@ using System.Web.OData;
 using Authentication.Domain.Models;
 using System.Threading.Tasks;
 using Authentication.Framework;
+using Authentication.API.Attributes;
 
 namespace Authentication.API.Controllers
 {
@@ -37,6 +38,7 @@ namespace Authentication.API.Controllers
 
     // GET api/values
     [EnableQuery()]
+    [AuthorizeUser]
     public IQueryable<Role> Get()
     {
       List<Role> _roles = UnitOfWork.RoleStore.ListAsync().Result;
@@ -44,6 +46,7 @@ namespace Authentication.API.Controllers
     }
 
     // GET api/values/5
+    [AuthorizeUser]
     public async Task<IHttpActionResult> Get(string id)
     {
       Guid _roleId = NullHandlers.NGUID(id);
@@ -79,6 +82,7 @@ namespace Authentication.API.Controllers
     }
 
     // POST api/values
+    [AuthorizeUser]
     public async Task<IHttpActionResult> Post([FromBody]Models.RoleViewModel value)
     {
       Role _role = null;
