@@ -13,7 +13,7 @@ namespace Authentication.API.Providers
   public class CustomJwtFormat : ISecureDataFormat<AuthenticationTicket>
   {
 
-    private readonly string _issuer = string.Empty;
+    private string _issuer = string.Empty;
 
     public CustomJwtFormat(string issuer)
     {
@@ -27,9 +27,14 @@ namespace Authentication.API.Providers
         throw new ArgumentNullException("data");
       }
 
-      string audienceId = ConfigurationManager.AppSettings["as:AudienceId"];
+      if(_issuer=="")
+      {
+        _issuer = data.Properties.Dictionary["as:issuer"];
+      }
 
-      string symmetricKeyAsBase64 = ConfigurationManager.AppSettings["as:AudienceSecret"];
+      string audienceId = data.Properties.Dictionary["as:client_id"];//ConfigurationManager.AppSettings["as:AudienceId"];
+
+      string symmetricKeyAsBase64 = data.Properties.Dictionary["as:client_secret"]; //ConfigurationManager.AppSettings["as:AudienceSecret"];
 
       var keyByteArray = TextEncodings.Base64Url.Decode(symmetricKeyAsBase64);
 

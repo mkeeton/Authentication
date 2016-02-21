@@ -48,6 +48,8 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Interfaces\IClaimRepository.cs" />
+    <Compile Include="Interfaces\IClientRepository.cs" />
+    <Compile Include="Interfaces\IRefreshTokenRepository.cs" />
     <Compile Include="Interfaces\IRepository.cs" />
     <Compile Include="Interfaces\IRoleRepository.cs" />
     <Compile Include="Interfaces\IUnitOfWork.cs" />
@@ -58,6 +60,8 @@
     <Compile Include="Repositories\Ole\RoleRepository.cs" />
     <Compile Include="Repositories\Ole\UserRepository.cs" />
     <Compile Include="Repositories\Sql\ClaimRepository.cs" />
+    <Compile Include="Repositories\Sql\ClientRepository.cs" />
+    <Compile Include="Repositories\Sql\RefreshTokenRepository.cs" />
     <Compile Include="Repositories\Sql\RoleRepository.cs" />
     <Compile Include="Repositories\Sql\UserRepository.cs" />
     <Compile Include="Repositories\Sql\UserSessionRepository.cs" />

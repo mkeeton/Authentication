@@ -35,6 +35,7 @@
       <Private>True</Private>
     </Reference>
     <Reference Include="System" />
+    <Reference Include="System.ComponentModel.DataAnnotations" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
@@ -43,7 +44,10 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Models\Client.cs" />
+    <Compile Include="Models\ClientAllowedOrigin.cs" />
     <Compile Include="Models\Login.cs" />
+    <Compile Include="Models\RefreshToken.cs" />
     <Compile Include="Models\Role.cs" />
     <Compile Include="Models\RoleApiPath.cs" />
     <Compile Include="Models\User.cs" />

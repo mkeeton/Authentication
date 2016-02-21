@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Authentication.Infrastructure.Interfaces
 {
-  public interface IUnitOfWork
+  public interface IUnitOfWork : IDisposable
   {
   }
 }

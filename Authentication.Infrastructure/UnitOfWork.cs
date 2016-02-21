@@ -63,6 +63,18 @@ namespace Authentication.Infrastructure
       set;
     }
 
+    public Interfaces.IClientRepository ClientStore
+    {
+      get;
+      set;
+    }
+
+    public Interfaces.IRefreshTokenRepository RefreshTokenStore
+    {
+      get;
+      set;
+    }
+
     public Interfaces.IUserSessionRepository UserSessionStore
     {
       get;

@@ -69,6 +69,18 @@ namespace Authentication.API.IOC.CastleWindsor.Installers
       );
 
       container.Register(
+                Component.For<IClientRepository>()
+                .ImplementedBy<Authentication.Infrastructure.Repositories.Sql.ClientRepository>()
+                .LifeStyle.PerWebRequest
+      );
+
+      container.Register(
+                Component.For<IRefreshTokenRepository>()
+                .ImplementedBy<Authentication.Infrastructure.Repositories.Sql.RefreshTokenRepository>()
+                .LifeStyle.PerWebRequest
+      );
+
+      container.Register(
                 Component.For<Infrastructure.ExtendedUnitOfWork>()
                 .ImplementedBy<Infrastructure.ExtendedUnitOfWork>()
                 .LifeStyle.PerWebRequest
