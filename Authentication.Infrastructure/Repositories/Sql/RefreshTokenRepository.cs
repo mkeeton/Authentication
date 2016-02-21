@@ -33,21 +33,7 @@ namespace Authentication.Infrastructure.Repositories.Sql
       });
     }
 
-    public Task<RefreshToken> FindById(Guid tokenId)
-    {
-      if (tokenId == Guid.Empty)
-        throw new ArgumentNullException("tokenId");
-
-      return Task.Factory.StartNew(() =>
-      {
-        using (IDbConnection connection = CurrentContext.OpenConnection())
-        {
-          return connection.Query<RefreshToken>("select * from auth_RefreshTokens where Id = @Id", new { Id = tokenId }).SingleOrDefault();
-        }
-      });
-    }
-
-    public Task<RefreshToken> FindByTokenId(string tokenId)
+    public Task<RefreshToken> FindById(string tokenId)
     {
       if (tokenId == "")
         throw new ArgumentNullException("tokenId");
@@ -56,7 +42,7 @@ namespace Authentication.Infrastructure.Repositories.Sql
       {
         using (IDbConnection connection = CurrentContext.OpenConnection())
         {
-          return connection.Query<RefreshToken>("select * from auth_RefreshTokens where tokenId = @TokenId", new { TokenId = tokenId }).SingleOrDefault();
+          return connection.Query<RefreshToken>("select * from auth_RefreshTokens where Id = @Id", new { Id = tokenId }).SingleOrDefault();
         }
       });
     }
@@ -72,6 +58,35 @@ namespace Authentication.Infrastructure.Repositories.Sql
         {
           return connection.Query<RefreshToken>("select * from auth_RefreshTokens where UserId = @UserId", new { UserId = userId }).SingleOrDefault();
         }
+      });
+    }
+
+    public virtual Task<bool> CreateAsync(RefreshToken refreshToken)
+    {
+      if (refreshToken == null)
+        throw new ArgumentNullException("refreshToken");
+
+      return Task.Factory.StartNew(() =>
+      {
+        using (IDbConnection connection = CurrentContext.OpenConnection())
+          return connection.Execute("insert into auth_RefreshTokens(Id, UserId, IssuedUtc, ExpiresUtc, ProtectedTicket) values(@Id, @UserId, @IssuedUtc, @ExpiresUtc, @ProtectedTicket)", refreshToken)>0;
+      });
+    }
+
+    public virtual Task<bool> DeleteAsync(RefreshToken refreshToken)
+    {
+      return DeleteAsync(refreshToken.Id);
+    }
+
+    public virtual Task<bool> DeleteAsync(string refreshTokenId)
+    {
+      if (refreshTokenId == "")
+        throw new ArgumentNullException("refreshTokenId");
+
+      return Task.Factory.StartNew(() =>
+      {
+        using (IDbConnection connection = CurrentContext.OpenConnection())
+          return connection.Execute("delete from auth_RefreshTokens where Id = @Id", new { refreshTokenId })>0;
       });
     }
   }

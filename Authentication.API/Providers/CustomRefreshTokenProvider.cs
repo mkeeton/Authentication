@@ -6,80 +6,103 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Web;
+using Authentication.Domain.Models;
+using Authentication.Framework;
 
 namespace Authentication.API.Providers
 {
-  //public class CustomRefreshTokenProvider : IAuthenticationTokenProvider
-  //{
+  public class CustomRefreshTokenProvider : IAuthenticationTokenProvider
+  {
 
-  //  public async Task CreateAsync(AuthenticationTokenCreateContext context)
-  //  {
-  //    var clientid = context.Ticket.Properties.Dictionary["as:client_id"];
+    Authentication.API.Infrastructure.ExtendedUnitOfWork _unitOfWork;
 
-  //    if (string.IsNullOrEmpty(clientid))
-  //    {
-  //      return;
-  //    }
+    public Authentication.API.Infrastructure.ExtendedUnitOfWork UnitOfWork
+    {
+      get
+      {
+        if (_unitOfWork == null)
+        {
+          _unitOfWork = Authentication.API.WebApiApplication.GetContainer().Kernel.Resolve<Authentication.API.Infrastructure.ExtendedUnitOfWork>();
+        }
+        return _unitOfWork;
+      }
+    }
 
-  //    var refreshTokenId = Guid.NewGuid().ToString("n");
+    public async Task CreateAsync(AuthenticationTokenCreateContext context)
+    {
+      Guid userid = NullHandlers.NGUID(context.Ticket.Properties.Dictionary["as:user_id"]);
 
-  //    using (AuthRepository _repo = new AuthRepository())
-  //    {
-  //      var refreshTokenLifeTime = context.OwinContext.Get<string>("as:clientRefreshTokenLifeTime");
+      if (userid==Guid.Empty)
+      {
+        return;
+      }
 
-  //      var token = new RefreshToken()
-  //      {
-  //        Id = Helper.GetHash(refreshTokenId),
-  //        ClientId = clientid,
-  //        Subject = context.Ticket.Identity.Name,
-  //        IssuedUtc = DateTime.UtcNow,
-  //        ExpiresUtc = DateTime.UtcNow.AddMinutes(Convert.ToDouble(refreshTokenLifeTime))
-  //      };
+      var refreshTokenId = Guid.NewGuid().ToString("n");
 
-  //      context.Ticket.Properties.IssuedUtc = token.IssuedUtc;
-  //      context.Ticket.Properties.ExpiresUtc = token.ExpiresUtc;
+      var refreshTokenLifeTime = 30;
 
-  //      token.ProtectedTicket = context.SerializeTicket();
+      var token = new RefreshToken()
+      {
+        Id = Infrastructure.Encryption.GetHash(refreshTokenId),
+        UserId = userid,
+        IssuedUtc = DateTime.UtcNow,
+        ExpiresUtc = DateTime.UtcNow.AddMinutes(Convert.ToDouble(refreshTokenLifeTime))
+      };
 
-  //      var result = await _repo.AddRefreshToken(token);
+      context.Ticket.Properties.IssuedUtc = token.IssuedUtc;
+      context.Ticket.Properties.ExpiresUtc = token.ExpiresUtc;
 
-  //      if (result)
-  //      {
-  //        context.SetToken(refreshTokenId);
-  //      }
+      token.ProtectedTicket = context.SerializeTicket();
 
-  //    }
-  //  }
+      var result = await UnitOfWork.RefreshTokenStore.CreateAsync(token);
 
-  //  public async Task ReceiveAsync(AuthenticationTokenReceiveContext context)
-  //  {
+      if (result)
+      {
+        context.SetToken(refreshTokenId);
+      }
+    }
 
-  //    var allowedOrigin = context.OwinContext.Get<string>("as:clientAllowedOrigin");
-  //    context.OwinContext.Response.Headers.Add("Access-Control-Allow-Origin", new[] { allowedOrigin });
+    public async Task ReceiveAsync(AuthenticationTokenReceiveContext context)
+    {
 
-  //    string hashedTokenId = Helper.GetHash(context.Token);
+      var allowedOrigin = "NONE";
 
-  //    using (AuthRepository _repo = new AuthRepository())
-  //    {
-  //      var refreshToken = await _repo.FindRefreshToken(hashedTokenId);
+      List<ClientAllowedOrigin> _allowedOrigins;
 
-  //      if (refreshToken != null)
-  //      {
-  //        //Get protectedTicket from refreshToken class
-  //        context.DeserializeTicket(refreshToken.ProtectedTicket);
-  //        var result = await _repo.RemoveRefreshToken(hashedTokenId);
-  //      }
-  //    }
-  //  }
+      _allowedOrigins = await UnitOfWork.ClientStore.ListAllowedOrigins(new Guid());
 
-  //  public void Create(AuthenticationTokenCreateContext context)
-  //  {
-  //    throw new NotImplementedException();
-  //  }
+      foreach (ClientAllowedOrigin _origin in _allowedOrigins)
+      {
+        if ((_origin.AllowedURL.ToLower().Trim() == "*") || (_origin.AllowedURL.ToLower().Trim() == (context.Request.Headers["Origin"]).ToLower().Trim()))
+        {
+          allowedOrigin = context.Request.Headers["Origin"];
+          break;
+        }
+      }
 
-  //  public void Receive(AuthenticationTokenReceiveContext context)
-  //  {
-  //    throw new NotImplementedException();
-  //  }
-  //}
+      //var allowedOrigin = context.OwinContext.Get<string>("as:clientAllowedOrigin");
+      context.OwinContext.Response.Headers.Add("Access-Control-Allow-Origin", new[] { allowedOrigin });
+
+      string hashedTokenId = Infrastructure.Encryption.GetHash(context.Token);
+
+        var refreshToken = await UnitOfWork.RefreshTokenStore.FindById(hashedTokenId);
+
+        if (refreshToken != null)
+        {
+          //Get protectedTicket from refreshToken class
+          context.DeserializeTicket(refreshToken.ProtectedTicket);
+          var result = await UnitOfWork.RefreshTokenStore.DeleteAsync(hashedTokenId);
+        }
+    }
+
+    public void Create(AuthenticationTokenCreateContext context)
+    {
+      throw new NotImplementedException();
+    }
+
+    public void Receive(AuthenticationTokenReceiveContext context)
+    {
+      throw new NotImplementedException();
+    }
+  }
 }

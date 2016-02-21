@@ -9,6 +9,7 @@ using System.Web;
 using Microsoft.AspNet.Identity.Owin;
 using Authentication.Domain.Models;
 using System.Configuration;
+using Authentication.Framework;
 
 namespace Authentication.API.Providers
 {
@@ -72,7 +73,7 @@ namespace Authentication.API.Providers
         return Task.FromResult<object>(null);
       }
 
-      context.OwinContext.Set<string>("as:clientRefreshTokenLifeTime", client.RefreshTokenLifeTime.ToString());
+      //context.OwinContext.Set<string>("as:clientRefreshTokenLifeTime", client.RefreshTokenLifeTime.ToString());
 
       context.Validated();
       return Task.FromResult<object>(null);
@@ -123,11 +124,10 @@ namespace Authentication.API.Providers
       ClaimsIdentity oAuthIdentity = await userManager.GenerateUserIdentityAsync(user, "JWT");
       oAuthIdentity.AddClaims(_unitOfWork.ClaimStore.GetClaims(user));
       //oAuthIdentity.AddClaims(RolesFromClaims.CreateRolesBasedOnClaims(oAuthIdentity));
-      var currentSession = new UserSession(){UserId=user.Id};
-      await UnitOfWork.UserSessionStore.CreateAsync(currentSession);
-      oAuthIdentity.AddClaim(new Claim("authSessionId",currentSession.Id.ToString()));
+
       AuthenticationProperties prop = new AuthenticationProperties();
       prop.Dictionary.Add("as:issuer", "http://localhost:50378");
+      prop.Dictionary.Add("as:user_id", NullHandlers.NES(user.Id));
       prop.Dictionary.Add("as:client_id", ConfigurationManager.AppSettings["as:AudienceId"]);
       prop.Dictionary.Add("as:client_secret", ConfigurationManager.AppSettings["as:AudienceSecret"]);
       var ticket = new AuthenticationTicket(oAuthIdentity, prop);
@@ -138,14 +138,6 @@ namespace Authentication.API.Providers
 
     public override Task GrantRefreshToken(OAuthGrantRefreshTokenContext context)
     {
-      //var originalClient = context.Ticket.Properties.Dictionary["as:client_id"];
-      //var currentClient = context.ClientId;
-
-      //if (originalClient != currentClient)
-      //{
-      //  context.SetError("invalid_clientId", "Refresh token is issued to a different clientId.");
-      //  return Task.FromResult<object>(null);
-      //}
 
       // Change auth ticket for refresh token requests
       var newIdentity = new ClaimsIdentity(context.Ticket.Identity);
@@ -158,9 +150,8 @@ namespace Authentication.API.Providers
       newIdentity.AddClaim(new Claim("newClaim", "newValue"));
 
       AuthenticationProperties prop = context.Ticket.Properties;
-      prop.Dictionary.Add("as:issuer", "http://localhost:50378");
-      prop.Dictionary.Add("as:client_id", ConfigurationManager.AppSettings["as:AudienceId"]);
-      prop.Dictionary.Add("as:client_secret", ConfigurationManager.AppSettings["as:AudienceSecret"]);
+      //prop.Dictionary.Add("as:refresh_client_id", ConfigurationManager.AppSettings["as:AudienceId"]);
+      //prop.Dictionary.Add("as:refresh_client_secret", ConfigurationManager.AppSettings["as:AudienceSecret"]);
       var ticket = new AuthenticationTicket(newIdentity, prop);
       
       context.Validated(ticket);
@@ -170,10 +161,10 @@ namespace Authentication.API.Providers
 
     public override Task TokenEndpoint(OAuthTokenEndpointContext context)
     {
-      foreach (KeyValuePair<string, string> property in context.Properties.Dictionary)
-      {
-        context.AdditionalResponseParameters.Add(property.Key, property.Value);
-      }
+      //foreach (KeyValuePair<string, string> property in context.Properties.Dictionary)
+      //{
+      //  context.AdditionalResponseParameters.Add(property.Key, property.Value);
+      //}
 
       return Task.FromResult<object>(null);
     }

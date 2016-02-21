@@ -11,8 +11,11 @@ namespace Authentication.Infrastructure.Interfaces
   {
 
     Task<List<RefreshToken>> ListAsync();
-    Task<RefreshToken> FindById(Guid tokenId);
-    Task<RefreshToken> FindByTokenId(string tokenId);
+    Task<RefreshToken> FindById(string tokenId);
     Task<RefreshToken> FindByTokenUser(Guid userId);
+
+    Task<bool> CreateAsync(RefreshToken refreshToken);
+    Task<bool> DeleteAsync(RefreshToken refreshToken);
+    Task<bool> DeleteAsync(string refreshTokenId);
   }
 }

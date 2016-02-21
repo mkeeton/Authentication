@@ -257,6 +257,7 @@
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
+    <Compile Include="Infrastructure\Encryption.cs" />
     <Compile Include="Infrastructure\ExtendedUnitOfWork.cs" />
     <Compile Include="Infrastructure\Managers\ApplicationUserManager.cs" />
     <Compile Include="IOC\CastleWindsor\Factories\WindsorControllerFactory.cs" />

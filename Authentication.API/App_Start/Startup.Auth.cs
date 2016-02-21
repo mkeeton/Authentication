@@ -45,16 +45,16 @@ namespace Authentication.API
                 TokenEndpointPath = new PathString("/Token"),
                 //Provider = new ApplicationOAuthProvider(PublicClientId),
                 AuthorizeEndpointPath = new PathString("/api/Account/ExternalLogin"),
-                AccessTokenExpireTimeSpan = TimeSpan.FromDays(14),
+                AccessTokenExpireTimeSpan = TimeSpan.FromSeconds(30),
                 Provider = new Providers.CustomOAuthProvider(),
                 AccessTokenFormat = new Providers.CustomJwtFormat("http://localhost:50378"),
+                RefreshTokenProvider = new Providers.CustomRefreshTokenProvider(),
                 // In production mode set AllowInsecureHttp = false
                 AllowInsecureHttp = true
             };
 
             // Enable the application to use bearer tokens to authenticate users
             app.UseOAuthBearerTokens(OAuthOptions);
-
 
             var issuer = "http://localhost:50378";
             string audienceId = ConfigurationManager.AppSettings["as:AudienceId"];

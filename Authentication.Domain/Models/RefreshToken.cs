@@ -9,9 +9,8 @@ namespace Authentication.Domain.Models
   public class RefreshToken
   {
     [Key]
-    public Guid Id { get; set;}
-
-    public string TokenId { get; set; }
+    [Required]
+    public string Id { get; set;}
 
     [Required]
     public Guid UserId { get; set; }
