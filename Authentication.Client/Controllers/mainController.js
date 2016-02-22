@@ -13,7 +13,7 @@ mainController.controller('mainNavController', ['$scope','$location','authUserSe
   vmNav.logout = function () {
     authUserServices.logout.logoutUser(null,
         function (data) {
-          currentUser.setProfile("", "");
+          currentUser.setProfile("", "","");
           $location.url("/");
         },
         function (response) {

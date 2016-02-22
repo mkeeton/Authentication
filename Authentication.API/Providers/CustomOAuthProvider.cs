@@ -16,26 +16,21 @@ namespace Authentication.API.Providers
   public class CustomOAuthProvider : OAuthAuthorizationServerProvider
   {
 
-    Authentication.API.Infrastructure.ExtendedUnitOfWork _unitOfWork;
+    //Authentication.API.Infrastructure.ExtendedUnitOfWork _unitOfWork;
 
-    //public override Task ValidateClientAuthentication(OAuthValidateClientAuthenticationContext context)
-    //{
-    //  context.Validated();
-    //  return Task.FromResult<object>(null);
-    //}
     Client client = null;
     
-    public Authentication.API.Infrastructure.ExtendedUnitOfWork UnitOfWork
-    {
-      get
-      {
-        if(_unitOfWork==null)
-        {
-          _unitOfWork = Authentication.API.WebApiApplication.GetContainer().Kernel.Resolve<Authentication.API.Infrastructure.ExtendedUnitOfWork>();
-        }
-        return _unitOfWork;
-      }
-    }
+    //public Authentication.API.Infrastructure.ExtendedUnitOfWork UnitOfWork
+    //{
+    //  get
+    //  {
+    //    if(_unitOfWork==null)
+    //    {
+    //      _unitOfWork = Authentication.API.WebApiApplication.GetContainer().Kernel.Resolve<Authentication.API.Infrastructure.ExtendedUnitOfWork>();
+    //    }
+    //    return _unitOfWork;
+    //  }
+    //}
     
     public override Task ValidateClientAuthentication(OAuthValidateClientAuthenticationContext context)
     {
@@ -58,7 +53,9 @@ namespace Authentication.API.Providers
         return Task.FromResult<object>(null);
       }
 
-      client = UnitOfWork.ClientStore.FindByURL(context.ClientId).Result;
+      Infrastructure.ExtendedUnitOfWork _unitOfWork = Authentication.API.WebApiApplication.GetContainer().Kernel.Resolve<Authentication.API.Infrastructure.ExtendedUnitOfWork>();
+
+      client = _unitOfWork.ClientStore.FindByURL(context.ClientId).Result;
 
 
       if (client == null)
@@ -82,6 +79,8 @@ namespace Authentication.API.Providers
     public override async Task GrantResourceOwnerCredentials(OAuthGrantResourceOwnerCredentialsContext context)
     {
 
+      Infrastructure.ExtendedUnitOfWork _unitOfWork = Authentication.API.WebApiApplication.GetContainer().Kernel.Resolve<Authentication.API.Infrastructure.ExtendedUnitOfWork>();
+
       var allowedOrigin = "NONE";
 
       List<ClientAllowedOrigin> _allowedOrigins;
@@ -92,22 +91,20 @@ namespace Authentication.API.Providers
       }
       else
       {
-        _allowedOrigins = await UnitOfWork.ClientStore.ListAllowedOrigins(new Guid());
+        _allowedOrigins = await _unitOfWork.ClientStore.ListAllowedOrigins(new Guid());
       }
       foreach (ClientAllowedOrigin _origin in _allowedOrigins)
       {
-        if ((_origin.AllowedURL.ToLower().Trim() == "*") || (_origin.AllowedURL.ToLower().Trim() == (context.Request.Headers["Origin"]).ToLower().Trim()))
+        if ((_origin.AllowedURL.ToLower().Trim() == "*") || (_origin.AllowedURL.ToLower().Trim() == (context.Request.Headers["Referer"]).ToLower().Trim()))
         {
-          allowedOrigin = context.Request.Headers["Origin"];
+          allowedOrigin = context.Request.Headers["Referer"];
           break;
         }
       }
 
       context.OwinContext.Response.Headers.Add("Access-Control-Allow-Origin", new[] { allowedOrigin });
 
-      var userManager = UnitOfWork.UserManager;
-
-      User user = await userManager.FindAsync(context.UserName, context.Password);
+      User user = await _unitOfWork.UserManager.FindAsync(context.UserName, context.Password);
 
       if (user == null)
       {
@@ -121,7 +118,7 @@ namespace Authentication.API.Providers
       //  return;
       //}
 
-      ClaimsIdentity oAuthIdentity = await userManager.GenerateUserIdentityAsync(user, "JWT");
+      ClaimsIdentity oAuthIdentity = await _unitOfWork.UserManager.GenerateUserIdentityAsync(user, "JWT");
       oAuthIdentity.AddClaims(_unitOfWork.ClaimStore.GetClaims(user));
       //oAuthIdentity.AddClaims(RolesFromClaims.CreateRolesBasedOnClaims(oAuthIdentity));
 

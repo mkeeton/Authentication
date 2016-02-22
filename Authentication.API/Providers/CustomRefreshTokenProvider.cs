@@ -73,9 +73,9 @@ namespace Authentication.API.Providers
 
       foreach (ClientAllowedOrigin _origin in _allowedOrigins)
       {
-        if ((_origin.AllowedURL.ToLower().Trim() == "*") || (_origin.AllowedURL.ToLower().Trim() == (context.Request.Headers["Origin"]).ToLower().Trim()))
+        if ((_origin.AllowedURL.ToLower().Trim() == "*") || (_origin.AllowedURL.ToLower().Trim() == (context.Request.Headers["Referer"]).ToLower().Trim()))
         {
-          allowedOrigin = context.Request.Headers["Origin"];
+          allowedOrigin = context.Request.Headers["Referer"];
           break;
         }
       }

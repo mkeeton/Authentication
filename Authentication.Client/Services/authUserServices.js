@@ -6,10 +6,11 @@
       .factory("authUserServices",
               ["$resource",
                "appSettings",
+               "currentUser",
                  authUserServices])
 
 
-  function authUserServices($resource, appSettings) {
+  function authUserServices($resource, appSettings, currentUser) {
     return {
       registration : $resource(appSettings.serverPath + "/api/Account/Register",null,
         {
@@ -34,6 +35,27 @@
                     }
       ),
 
+      refreshLogin: function refeshUserServices() {
+        var deferred = $q.defer();
+
+        var authData = currentUser.getProfile();
+
+        if (authData) {
+
+          var data = "grant_type=refresh_token&refresh_token=" + authData.refreshToken;
+
+          $http.post(appSettings.serverPath + "/Token", data, { headers: { 'Content-Type': 'application/x-www-form-urlencoded' } }).success(function (response) {
+
+            currentUser.setProfile(response.userName, response.access_token, response.refresh_token);
+            deferred.resolve(response);
+
+          }).error(function (err, status) {
+            currentUser.setProfile("", "", "");
+            deferred.reject(err);
+          });
+        }
+      },
+
       logout: $resource(appSettings.serverPath + "/api/Account/Logout", null,
                     {
                       'logoutUser': {
@@ -43,4 +65,25 @@
       )
     }
   }
+
+  //function refeshUserServices($resource, appSettings, currentUser) {
+  //  var deferred = $q.defer();
+
+  //  var authData = currentUser.getProfile();
+
+  //  if (authData) {
+
+  //      var data = "grant_type=refresh_token&refresh_token=" + authData.refreshToken;
+
+  //    $http.post(appSettings.serverPath + "/Token", data, { headers: { 'Content-Type': 'application/x-www-form-urlencoded' } }).success(function (response) {
+
+  //        currentUser.setProfile(response.userName, response.access_token, response.refresh_token);
+  //        deferred.resolve(response);
+
+  //      }).error(function (err, status) {
+  //        currentUser.setProfile("", "", "");
+  //        deferred.reject(err);
+  //      });
+  //  }
+  //}
 })();

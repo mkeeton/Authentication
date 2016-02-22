@@ -11,12 +11,14 @@
     var profile = {
       isLoggedIn: false,
       userName: "",
-      token: ""
+      token: "",
+      refreshToken: ""
     };
 
-    var setProfile = function (username, token) {
+    var setProfile = function (username, token, refreshToken) {
       profile.userName = username;
       profile.token = token;
+      profile.refreshToken = refreshToken;
       if (username == "") {
         profile.isLoggedIn = false;
       }

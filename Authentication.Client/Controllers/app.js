@@ -47,7 +47,7 @@ authenticationApp.config(['$routeProvider', '$locationProvider', '$httpProvider'
     $httpProvider.interceptors.push('APIInterceptor');
   }])
 
-  .service('APIInterceptor', ['$location', 'currentUser', function ($location, currentUser) {
+  .service('APIInterceptor', ['$q','$location', 'currentUser', function ($q, $location, currentUser) {
     var service = this;
 
     service.request = function (config) {
@@ -66,5 +66,12 @@ authenticationApp.config(['$routeProvider', '$locationProvider', '$httpProvider'
     //  }
     //  //return response;
     //};
+    service.responseError = function (response) {
+      if (response.status === 401) {
+        currentUser.setProfile("", "", "");
+        $location.url("/");
+      }
+      return $q.reject(response);
+    };
   }])
 ;
