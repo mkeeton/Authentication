@@ -93,17 +93,24 @@ namespace Authentication.API.Providers
       {
         _allowedOrigins = await _unitOfWork.ClientStore.ListAllowedOrigins(new Guid());
       }
-      string _originPath = context.Request.Headers["Origin"];
-      string _originCompare = _originPath.ToLower().Trim();
-      if(_originCompare.LastIndexOf("/")!=(_originCompare.Length-1)) _originCompare += "/";
-      foreach (ClientAllowedOrigin _origin in _allowedOrigins)
+      string _originPath = NullHandlers.NES(context.Request.Headers["Origin"]);
+      if (_originPath == "")
       {
-        string _allowedCompare = _origin.AllowedURL.ToLower().Trim();
-        if ((_allowedCompare.LastIndexOf("/") != (_allowedCompare.Length - 1)) && (_allowedCompare!="*")) _allowedCompare += "/";
-        if ((_origin.AllowedURL.ToLower().Trim() == "*") || (_origin.AllowedURL.ToLower().Trim() == _originCompare))
+        allowedOrigin = "*";
+      }
+      else
+      { 
+        string _originCompare = _originPath.ToLower().Trim();
+        if(_originCompare.LastIndexOf("/")!=(_originCompare.Length-1)) _originCompare += "/";
+        foreach (ClientAllowedOrigin _origin in _allowedOrigins)
         {
-          allowedOrigin = _originPath;
-          break;
+          string _allowedCompare = _origin.AllowedURL.ToLower().Trim();
+          if ((_allowedCompare.LastIndexOf("/") != (_allowedCompare.Length - 1)) && (_allowedCompare!="*")) _allowedCompare += "/";
+          if ((_origin.AllowedURL.ToLower().Trim() == "*") || (_origin.AllowedURL.ToLower().Trim() == _originCompare))
+          {
+            allowedOrigin = _originPath;
+            break;
+          }
         }
       }
 

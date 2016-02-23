@@ -47,7 +47,7 @@ authenticationApp.config(['$routeProvider', '$locationProvider', '$httpProvider'
     $httpProvider.interceptors.push('APIInterceptor');
   }])
 
-  .factory('APIInterceptor', ['$q', '$location', 'currentUser', '$injector', function ($q, $location, currentUser, $injector) {
+  .factory('APIInterceptor', ['$q', '$location', 'currentUser', '$injector', 'appSettings', function ($q, $location, currentUser, $injector, appSettings) {
     return {
       responseError: responseError,
       request: request,
@@ -55,32 +55,38 @@ authenticationApp.config(['$routeProvider', '$locationProvider', '$httpProvider'
 
     function request(config) {
       var d = $q.defer();
-      var user = currentUser.getProfile(),
+      if (config.url.toLowerCase().indexOf(appSettings.serverPath.toLowerCase()) == 0)
+      {     
+        var user = currentUser.getProfile(),
 
-      refresh_token = user.refreshToken != "" ? user.refreshToken : null;
-      current_UserName = user.userName != "" ? user.userName : null;
-      var authUserServices = $injector.get('authUserServices');
-      //access_token = user.token != "" ? user.token : null;
-      if (refresh_token) {
-        var completed = false;
-        var refresh = {};
-        refresh.grant_type = "refresh_token";
-        refresh.refresh_token = refresh_token;
-        currentUser.setProfile(current_UserName, "", "");
-        authUserServices.login.loginUser(refresh,
-            function (data) {
-              access_token = data.access_token;
-              refresh_token = data.refresh_token;
-              currentUser.setProfile(current_UserName, access_token, refresh_token);
-              if (access_token) {
-                config.headers.authorization = 'Bearer ' + access_token;
+        refresh_token = user.refreshToken != "" ? user.refreshToken : null;
+        current_UserName = user.userName != "" ? user.userName : null;
+        var authUserServices = $injector.get('authUserServices');
+        //access_token = user.token != "" ? user.token : null;
+        if (refresh_token) {
+          var refresh = {};
+          refresh.grant_type = "refresh_token";
+          refresh.refresh_token = refresh_token;
+          currentUser.setProfile(current_UserName, "", "");
+          authUserServices.login.loginUser(refresh,
+              function (data) {
+                access_token = data.access_token;
+                refresh_token = data.refresh_token;
+                currentUser.setProfile(current_UserName, access_token, refresh_token);
+                if (access_token) {
+                  config.headers.authorization = 'Bearer ' + access_token;
+                }
+                d.resolve(config);
+              },
+              function (response) {
+                d.resolve(config);
               }
-              d.resolve(config);
-            },
-            function (response) {
-              d.resolve(config);
-            }
-        );
+          );
+        }
+        else
+        {
+          d.resolve(config);
+        }
       }
       else
       {
