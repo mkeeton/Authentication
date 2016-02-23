@@ -33,7 +33,7 @@ authUserControllers.controller('AuthenticationController', ["$location","authUse
         function (data) {
           vm.message = "";
           vm.user.Password = "";
-          currentUser.setProfile(vm.user.UserName, data.access_token);
+          currentUser.setProfile(vm.user.UserName, data.access_token,data.refresh_token);
           $location.url("/AccountSummary");
         },
         function (response) {

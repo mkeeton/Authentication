@@ -14,17 +14,11 @@ namespace Authentication.API.Providers
   public class CustomRefreshTokenProvider : IAuthenticationTokenProvider
   {
 
-    Authentication.API.Infrastructure.ExtendedUnitOfWork _unitOfWork;
-
     public Authentication.API.Infrastructure.ExtendedUnitOfWork UnitOfWork
     {
       get
       {
-        if (_unitOfWork == null)
-        {
-          _unitOfWork = Authentication.API.WebApiApplication.GetContainer().Kernel.Resolve<Authentication.API.Infrastructure.ExtendedUnitOfWork>();
-        }
-        return _unitOfWork;
+        return Authentication.API.WebApiApplication.GetContainer().Kernel.Resolve<Authentication.API.Infrastructure.ExtendedUnitOfWork>();
       }
     }
 
@@ -71,16 +65,20 @@ namespace Authentication.API.Providers
 
       _allowedOrigins = await UnitOfWork.ClientStore.ListAllowedOrigins(new Guid());
 
+      string _originPath = context.Request.Headers["Origin"];
+      string _originCompare = _originPath.ToLower().Trim();
+      if (_originCompare.LastIndexOf("/") != (_originCompare.Length - 1)) _originCompare += "/";
       foreach (ClientAllowedOrigin _origin in _allowedOrigins)
       {
-        if ((_origin.AllowedURL.ToLower().Trim() == "*") || (_origin.AllowedURL.ToLower().Trim() == (context.Request.Headers["Referer"]).ToLower().Trim()))
+        string _allowedCompare = _origin.AllowedURL.ToLower().Trim();
+        if ((_allowedCompare.LastIndexOf("/") != (_allowedCompare.Length - 1)) && (_allowedCompare != "*")) _allowedCompare += "/";
+        if ((_origin.AllowedURL.ToLower().Trim() == "*") || (_origin.AllowedURL.ToLower().Trim() == _originCompare))
         {
-          allowedOrigin = context.Request.Headers["Referer"];
+          allowedOrigin = _originPath;
           break;
         }
       }
 
-      //var allowedOrigin = context.OwinContext.Get<string>("as:clientAllowedOrigin");
       context.OwinContext.Response.Headers.Add("Access-Control-Allow-Origin", new[] { allowedOrigin });
 
       string hashedTokenId = Infrastructure.Encryption.GetHash(context.Token);

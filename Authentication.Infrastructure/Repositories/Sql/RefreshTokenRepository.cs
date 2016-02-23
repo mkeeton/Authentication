@@ -86,7 +86,7 @@ namespace Authentication.Infrastructure.Repositories.Sql
       return Task.Factory.StartNew(() =>
       {
         using (IDbConnection connection = CurrentContext.OpenConnection())
-          return connection.Execute("delete from auth_RefreshTokens where Id = @Id", new { refreshTokenId })>0;
+          return connection.Execute("delete from auth_RefreshTokens where Id = @Id", new { Id = refreshTokenId })>0;
       });
     }
   }

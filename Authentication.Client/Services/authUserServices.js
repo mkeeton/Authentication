@@ -35,26 +35,43 @@
                     }
       ),
 
-      refreshLogin: function refeshUserServices() {
-        var deferred = $q.defer();
+      refreshAuth: $resource(appSettings.serverPath + "/Token", null,
+                    {
+                      'refreshAuth': {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+                        transformRequest: function (data, headersGetter) {
+                          var str = [];
+                          for (var d in data)
+                            str.push(encodeURIComponent(d) + "=" +
+                                                encodeURIComponent(data[d]));
+                          return str.join("&");
+                        }
 
-        var authData = currentUser.getProfile();
+                      }
+                    }
+      ),
 
-        if (authData) {
+      //refreshLogin: function refeshUserServices() {
+      //  var deferred = $q.defer();
 
-          var data = "grant_type=refresh_token&refresh_token=" + authData.refreshToken;
+      //  var authData = currentUser.getProfile();
 
-          $http.post(appSettings.serverPath + "/Token", data, { headers: { 'Content-Type': 'application/x-www-form-urlencoded' } }).success(function (response) {
+      //  if (authData) {
 
-            currentUser.setProfile(response.userName, response.access_token, response.refresh_token);
-            deferred.resolve(response);
+      //    var data = "grant_type=refresh_token&refresh_token=" + authData.refreshToken;
 
-          }).error(function (err, status) {
-            currentUser.setProfile("", "", "");
-            deferred.reject(err);
-          });
-        }
-      },
+      //    $http.post(appSettings.serverPath + "/Token", data, { headers: { 'Content-Type': 'application/x-www-form-urlencoded' } }).success(function (response) {
+
+      //      currentUser.setProfile(response.userName, response.access_token, response.refresh_token);
+      //      deferred.resolve(response);
+
+      //    }).error(function (err, status) {
+      //      currentUser.setProfile("", "", "");
+      //      deferred.reject(err);
+      //    });
+      //  }
+      //},
 
       logout: $resource(appSettings.serverPath + "/api/Account/Logout", null,
                     {

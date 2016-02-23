@@ -93,11 +93,16 @@ namespace Authentication.API.Providers
       {
         _allowedOrigins = await _unitOfWork.ClientStore.ListAllowedOrigins(new Guid());
       }
+      string _originPath = context.Request.Headers["Origin"];
+      string _originCompare = _originPath.ToLower().Trim();
+      if(_originCompare.LastIndexOf("/")!=(_originCompare.Length-1)) _originCompare += "/";
       foreach (ClientAllowedOrigin _origin in _allowedOrigins)
       {
-        if ((_origin.AllowedURL.ToLower().Trim() == "*") || (_origin.AllowedURL.ToLower().Trim() == (context.Request.Headers["Referer"]).ToLower().Trim()))
+        string _allowedCompare = _origin.AllowedURL.ToLower().Trim();
+        if ((_allowedCompare.LastIndexOf("/") != (_allowedCompare.Length - 1)) && (_allowedCompare!="*")) _allowedCompare += "/";
+        if ((_origin.AllowedURL.ToLower().Trim() == "*") || (_origin.AllowedURL.ToLower().Trim() == _originCompare))
         {
-          allowedOrigin = context.Request.Headers["Referer"];
+          allowedOrigin = _originPath;
           break;
         }
       }
@@ -164,6 +169,19 @@ namespace Authentication.API.Providers
       //}
 
       return Task.FromResult<object>(null);
+    }
+
+    public override Task MatchEndpoint(OAuthMatchEndpointContext context)
+    {
+      if (context.IsTokenEndpoint && context.Request.Method == "OPTIONS")
+      {
+        context.OwinContext.Response.Headers.Add("Access-Control-Allow-Origin", new[] { "*" });
+        context.OwinContext.Response.Headers.Add("Access-Control-Allow-Headers", new[] { "authorization" });
+        context.RequestCompleted();
+        return Task.FromResult(0);
+      }
+
+      return base.MatchEndpoint(context);
     }
   }
 }

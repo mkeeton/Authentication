@@ -47,26 +47,49 @@ authenticationApp.config(['$routeProvider', '$locationProvider', '$httpProvider'
     $httpProvider.interceptors.push('APIInterceptor');
   }])
 
-  .service('APIInterceptor', ['$q','$location', 'currentUser', function ($q, $location, currentUser) {
-    var service = this;
-
-    service.request = function (config) {
-      var user = currentUser.getProfile(),
-          access_token = user.username!="" ? user.token : null;
-
-      if (access_token) {
-        config.headers.authorization = 'Bearer ' + access_token;
-      }
-      return config;
+  .factory('APIInterceptor', ['$q', '$location', 'currentUser', '$injector', function ($q, $location, currentUser, $injector) {
+    return {
+      responseError: responseError,
+      request: request,
     };
 
-    //service.responseError = function (response) {
-    //  if (response.status === 401) {
-    //    $location.url("/");
-    //  }
-    //  //return response;
-    //};
-    service.responseError = function (response) {
+    function request(config) {
+      var d = $q.defer();
+      var user = currentUser.getProfile(),
+
+      refresh_token = user.refreshToken != "" ? user.refreshToken : null;
+      current_UserName = user.userName != "" ? user.userName : null;
+      var authUserServices = $injector.get('authUserServices');
+      //access_token = user.token != "" ? user.token : null;
+      if (refresh_token) {
+        var completed = false;
+        var refresh = {};
+        refresh.grant_type = "refresh_token";
+        refresh.refresh_token = refresh_token;
+        currentUser.setProfile(current_UserName, "", "");
+        authUserServices.login.loginUser(refresh,
+            function (data) {
+              access_token = data.access_token;
+              refresh_token = data.refresh_token;
+              currentUser.setProfile(current_UserName, access_token, refresh_token);
+              if (access_token) {
+                config.headers.authorization = 'Bearer ' + access_token;
+              }
+              d.resolve(config);
+            },
+            function (response) {
+              d.resolve(config);
+            }
+        );
+      }
+      else
+      {
+        d.resolve(config);
+      }
+      return d.promise;
+    };
+
+    function responseError(response) {
       if (response.status === 401) {
         currentUser.setProfile("", "", "");
         $location.url("/");
@@ -74,4 +97,31 @@ authenticationApp.config(['$routeProvider', '$locationProvider', '$httpProvider'
       return $q.reject(response);
     };
   }])
+
+  //.service('APIInterceptor', ['$q', '$location', 'currentUser', function ($q, $location, currentUser) {
+  //  var service = this;
+
+  //  service.request = function (config) {
+  //    var user = currentUser.getProfile(),
+
+  //    refresh_token = user.refreshToken != "" ? user.refreshToken : null;
+  //    access_token = user.token != "" ? user.token : null;
+  //    if (refresh_token)
+  //    {
+  //      console.log(refresh_token);
+  //    }
+  //    if (access_token) {
+  //      config.headers.authorization = 'Bearer ' + access_token;
+  //    }
+  //    return config;
+  //  };
+
+  //  service.responseError = function (response) {
+  //    if (response.status === 401) {
+  //      currentUser.setProfile("", "", "");
+  //      $location.url("/");
+  //    }
+  //    return $q.reject(response);
+  //  };
+  //}])
 ;
