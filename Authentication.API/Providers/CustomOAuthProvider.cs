@@ -16,21 +16,13 @@ namespace Authentication.API.Providers
   public class CustomOAuthProvider : OAuthAuthorizationServerProvider
   {
 
-    //Authentication.API.Infrastructure.ExtendedUnitOfWork _unitOfWork;
-
-    Client client = null;
-    
-    //public Authentication.API.Infrastructure.ExtendedUnitOfWork UnitOfWork
-    //{
-    //  get
-    //  {
-    //    if(_unitOfWork==null)
-    //    {
-    //      _unitOfWork = Authentication.API.WebApiApplication.GetContainer().Kernel.Resolve<Authentication.API.Infrastructure.ExtendedUnitOfWork>();
-    //    }
-    //    return _unitOfWork;
-    //  }
-    //}
+    public Authentication.API.Infrastructure.ExtendedUnitOfWork UnitOfWork
+    {
+      get
+      {
+          return Authentication.API.WebApiApplication.GetContainer().Kernel.Resolve<Authentication.API.Infrastructure.ExtendedUnitOfWork>();
+      }
+    }
     
     public override Task ValidateClientAuthentication(OAuthValidateClientAuthenticationContext context)
     {
@@ -44,8 +36,9 @@ namespace Authentication.API.Providers
         context.TryGetFormCredentials(out clientId, out clientSecret);
       }
 
-      if (context.ClientId == null)
+      if ((context.ClientId == null)||(context.ClientId=="bumfluff"))
       {
+        context.OwinContext.Set<string>("as:current_client_id", ConfigurationManager.AppSettings["as:AudienceId"]);
         //Remove the comments from the below line context.SetError, and invalidate context 
         //if you want to force sending clientId/secrects once obtain access tokens. 
         context.Validated();
@@ -53,9 +46,7 @@ namespace Authentication.API.Providers
         return Task.FromResult<object>(null);
       }
 
-      Infrastructure.ExtendedUnitOfWork _unitOfWork = Authentication.API.WebApiApplication.GetContainer().Kernel.Resolve<Authentication.API.Infrastructure.ExtendedUnitOfWork>();
-
-      client = _unitOfWork.ClientStore.FindByURL(context.ClientId).Result;
+      Client client = UnitOfWork.ClientStore.FindByURL(context.ClientId).Result;
 
 
       if (client == null)
@@ -70,16 +61,16 @@ namespace Authentication.API.Providers
         return Task.FromResult<object>(null);
       }
 
-      //context.OwinContext.Set<string>("as:clientRefreshTokenLifeTime", client.RefreshTokenLifeTime.ToString());
+      context.OwinContext.Set<string>("as:current_client_id", client.ClientId);
 
       context.Validated();
+      context.OwinContext.Set<Client>("as:requested_client", client);
       return Task.FromResult<object>(null);
     }
 
     public override async Task GrantResourceOwnerCredentials(OAuthGrantResourceOwnerCredentialsContext context)
     {
-
-      Infrastructure.ExtendedUnitOfWork _unitOfWork = Authentication.API.WebApiApplication.GetContainer().Kernel.Resolve<Authentication.API.Infrastructure.ExtendedUnitOfWork>();
+      Client client = context.OwinContext.Get<Client>("as:requested_client");
 
       var allowedOrigin = "NONE";
 
@@ -91,7 +82,7 @@ namespace Authentication.API.Providers
       }
       else
       {
-        _allowedOrigins = await _unitOfWork.ClientStore.ListAllowedOrigins(new Guid());
+        _allowedOrigins = await UnitOfWork.ClientStore.ListAllowedOrigins(new Guid());
       }
       string _originPath = NullHandlers.NES(context.Request.Headers["Origin"]);
       if (_originPath == "")
@@ -116,7 +107,7 @@ namespace Authentication.API.Providers
 
       context.OwinContext.Response.Headers.Add("Access-Control-Allow-Origin", new[] { allowedOrigin });
 
-      User user = await _unitOfWork.UserManager.FindAsync(context.UserName, context.Password);
+      User user = await UnitOfWork.UserManager.FindAsync(context.UserName, context.Password);
 
       if (user == null)
       {
@@ -130,8 +121,8 @@ namespace Authentication.API.Providers
       //  return;
       //}
 
-      ClaimsIdentity oAuthIdentity = await _unitOfWork.UserManager.GenerateUserIdentityAsync(user, "JWT");
-      oAuthIdentity.AddClaims(_unitOfWork.ClaimStore.GetClaims(user));
+      ClaimsIdentity oAuthIdentity = await UnitOfWork.UserManager.GenerateUserIdentityAsync(user, "JWT");
+      oAuthIdentity.AddClaims(UnitOfWork.ClaimStore.GetClaims(user));
       //oAuthIdentity.AddClaims(RolesFromClaims.CreateRolesBasedOnClaims(oAuthIdentity));
 
       AuthenticationProperties prop = new AuthenticationProperties();
@@ -159,8 +150,14 @@ namespace Authentication.API.Providers
       newIdentity.AddClaim(new Claim("newClaim", "newValue"));
 
       AuthenticationProperties prop = context.Ticket.Properties;
-      //prop.Dictionary.Add("as:refresh_client_id", ConfigurationManager.AppSettings["as:AudienceId"]);
-      //prop.Dictionary.Add("as:refresh_client_secret", ConfigurationManager.AppSettings["as:AudienceSecret"]);
+      Client _client = context.OwinContext.Get<Client>("as:requested_client");
+      if(!(_client==null))
+      { 
+        prop.Dictionary.Remove("as:client_id");
+        prop.Dictionary.Remove("as:client_secret");
+        prop.Dictionary.Add("as:client_id", _client.ClientId);
+        prop.Dictionary.Add("as:client_secret", _client.Secret);
+      }
       var ticket = new AuthenticationTicket(newIdentity, prop);
       
       context.Validated(ticket);

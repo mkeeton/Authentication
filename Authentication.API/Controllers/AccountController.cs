@@ -443,7 +443,11 @@ namespace Authentication.API.Controllers
       base.Dispose(disposing);
     }
 
-
+    [Route("GetSSOToken")]
+    public async Task<IHttpActionResult> GetSSOToken(string SSOClientUrl)
+    {
+      return Ok("");
+    }
 
     #region Helpers
 

@@ -67,6 +67,7 @@ authenticationApp.config(['$routeProvider', '$locationProvider', '$httpProvider'
           var refresh = {};
           refresh.grant_type = "refresh_token";
           refresh.refresh_token = refresh_token;
+          refresh.client_id = "bumfluff";
           currentUser.setProfile(current_UserName, "", "");
           authUserServices.login.loginUser(refresh,
               function (data) {

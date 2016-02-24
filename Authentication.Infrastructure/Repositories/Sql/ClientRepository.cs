@@ -49,7 +49,10 @@ namespace Authentication.Infrastructure.Repositories.Sql
         using (IDbConnection connection = CurrentContext.OpenConnection())
         { 
           Client _client = connection.Query<Client>("select * from auth_Clients where Id = @Id", new { Id = clientId }).SingleOrDefault();
-          _client.AllowedOrigins = ListAllowedOrigins(_client).Result;
+          if (_client != null)
+          {
+            _client.AllowedOrigins = ListAllowedOrigins(_client).Result;
+          }
           return _client;
         }
       });
@@ -65,7 +68,10 @@ namespace Authentication.Infrastructure.Repositories.Sql
         using (IDbConnection connection = CurrentContext.OpenConnection())
         {
           Client _client = connection.Query<Client>("select * from auth_Clients where ClientId = @ClientId", new { ClientId = clientAppId }).SingleOrDefault();
-          _client.AllowedOrigins = ListAllowedOrigins(_client).Result;
+          if (_client != null)
+          {
+            _client.AllowedOrigins = ListAllowedOrigins(_client).Result;
+          }
           return _client;
         }
       });
@@ -81,7 +87,10 @@ namespace Authentication.Infrastructure.Repositories.Sql
         using (IDbConnection connection = CurrentContext.OpenConnection())
         {
           Client _client = connection.Query<Client>("select * from auth_Clients where URL = @ClientURL", new { ClientURL = clientURL }).SingleOrDefault();
-          _client.AllowedOrigins = ListAllowedOrigins(_client).Result;
+          if(_client!=null)
+          { 
+           _client.AllowedOrigins = ListAllowedOrigins(_client).Result;
+          }
           return _client;
         }
       });

@@ -95,7 +95,14 @@ namespace Authentication.API.Providers
         {
           //Get protectedTicket from refreshToken class
           context.DeserializeTicket(refreshToken.ProtectedTicket);
-          var result = await UnitOfWork.RefreshTokenStore.DeleteAsync(hashedTokenId);
+
+          var originalClient = context.Ticket.Properties.Dictionary["as:client_id"];
+          var currentClient = context.OwinContext.Get<string>("as:current_client_id");
+
+          if(originalClient.ToLower().Trim()==currentClient.ToLower().Trim())
+          { 
+            var result = await UnitOfWork.RefreshTokenStore.DeleteAsync(hashedTokenId);
+          }
         }
     }
 
