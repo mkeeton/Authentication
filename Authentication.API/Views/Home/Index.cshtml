@@ -1,5 +1,28 @@
-﻿<div class="jumbotron">
-  <h1>Authentication</h1>
-  <p class="lead">This authentication engine is designed to be accessed via API calls from authorised clients.</p>
-  <p></p>
-</div>
+﻿<!doctype html>
+<html>
+<head>
+  <title>Authentication</title>
+  <script src="/node_modules/es6-shim/es6-shim.js"></script>
+  <script src="/node_modules/angular2/bundles/angular2-polyfills.js"></script>
+  <script src="/node_modules/systemjs/dist/system.src.js"></script>
+  <script src="/node_modules/rxjs/bundles/Rx.js"></script>
+  <script src="/node_modules/angular2/bundles/angular2.min.js"></script>
+  <script src="/node_modules/angular2/bundles/http.min.js"></script>
+</head>
+<body>
+  <script>
+    System.config({
+			packages: {
+			  app: {
+				format: 'register',
+				defaultExtension: 'js'
+			  }
+			}
+		  });
+		  System.import('/app/app.js')
+				.then(null, console.error.bind(console));
+  </script>
+
+  <authentication-app></authentication-app>
+</body>
+</html>

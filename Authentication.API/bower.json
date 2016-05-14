@@ -1,0 +1,25 @@
+{
+  "name": "Authentication",
+  "description": "Central Authentication System",
+  "main": "index.html",
+  "authors": [
+    "mkeeton <mkeeton@IntegratedSoftwareSolutions.co.uk>"
+  ],
+  "license": "MIT",
+  "keywords": [
+    "Angular2"
+  ],
+  "homepage": "www.demo.co.uk",
+  "private": true,
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "jquery": "^2.2.3",
+    "bootstrap": "^3.3.6"
+  }
+}

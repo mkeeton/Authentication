@@ -1,0 +1,21 @@
+{
+    "name": "Authentication",
+    "version": "0.0.1",
+    "scripts": { 
+            "clean": "rm -f ./*.js; rm -f ./*.js.map",
+            "tsc": "./node_modules/.bin/tsc",
+            "tsc:w": "./node_modules/.bin/tsc -w"
+    },
+  "dependencies": {
+    "angular2": "^2.0.0-beta.17",
+    "es6-shim": "^0.35.0",
+    "gulp": "^3.9.1",
+    "reflect-metadata": "^0.1.2",
+    "rxjs": "^5.0.0-beta.6",
+    "systemjs": "^0.19.27",
+    "tslint": "^3.9.0",
+    "typescript": "^1.8.10",
+    "zone.js": "^0.6.12"
+  },
+  "devDependencies": {}
+}

@@ -77,6 +77,7 @@ authenticationApp.config(['$routeProvider', '$locationProvider', '$httpProvider'
                 if (access_token) {
                   config.headers.authorization = 'Bearer ' + access_token;
                 }
+                console.log(config);
                 d.resolve(config);
               },
               function (response) {
